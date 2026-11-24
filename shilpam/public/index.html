@@ -1,0 +1,1487 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shilpam — AI poster studio</title>
+    <meta name="color-scheme" content="light" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;800;900&family=Inter:wght@400;500;700;800&family=Anton&family=Fredoka:wght@500;700&family=Noto+Sans+Devanagari:wght@700&display=swap"
+      rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+    <style>
+      :root {
+        --cream: #f6f1e7;
+        --sand: #ebe2cf;
+        --sage: #8a9a7b;
+        --moss: #3f5a47;
+        --forest: #22372b;
+        --rose: #e58f83;
+        --ink: #22372b;
+        --bw: 36px;
+        --tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='36' viewBox='0 0 56 36'%3E%3Crect width='56' height='36' fill='%23F6F1E7'/%3E%3Cpath d='M0 3h56M0 33h56' stroke='%233F5A47' stroke-width='1.5'/%3E%3Cpath d='M28 6l10 12-10 12-10-12z' fill='%233F5A47'/%3E%3Cpath d='M28 11l5.5 7-5.5 7-5.5-7z' fill='%23F6F1E7'/%3E%3Ccircle cx='28' cy='18' r='2.6' fill='%23E58F83'/%3E%3Cpath d='M2 18q6-8 12 0q-6 8-12 0M42 18q6-8 12 0q-6 8-12 0' fill='%238A9A7B'/%3E%3C/svg%3E");
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+      }
+      body {
+        min-height: 100vh;
+        color: var(--ink);
+        font-family: Inter, system-ui, sans-serif;
+        padding: 78px clamp(52px, 6vw, 90px) 120px;
+        background:
+          radial-gradient(ellipse at 12% 0%, #e3e8d6 0, transparent 48%),
+          radial-gradient(ellipse at 95% 18%, #f6dad2 0, transparent 32%),
+          radial-gradient(ellipse at 70% 100%, #dce6d8 0, transparent 45%),
+          var(--cream);
+      }
+      #frame {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 40;
+      }
+      #frame::after {
+        content: '';
+        position: absolute;
+        inset: var(--bw);
+        border: 1px solid #8a9a7b88;
+      }
+      #frame i {
+        position: absolute;
+        display: block;
+        height: var(--bw);
+        background-color: var(--cream);
+        background-image: var(--tile);
+        background-repeat: repeat-x;
+        background-size: auto 100%;
+        background-position: center;
+      }
+      #frame .bt {
+        top: 0;
+        left: 0;
+        right: 0;
+      }
+      #frame .bb {
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+      #frame .bl {
+        top: 0;
+        left: 0;
+        width: 100vh;
+        transform-origin: 0 0;
+        transform: translateY(100vh) rotate(-90deg);
+        width: 100dvh;
+        transform: translateY(100dvh) rotate(-90deg);
+      }
+      #frame .br {
+        top: 0;
+        right: 0;
+        width: 100vh;
+        transform-origin: 100% 0;
+        transform: translateY(100vh) rotate(90deg);
+        width: 100dvh;
+        transform: translateY(100dvh) rotate(90deg);
+      }
+      #frame b {
+        position: absolute;
+        width: var(--bw);
+        height: var(--bw);
+        background: var(--cream);
+        display: grid;
+        place-items: center;
+        z-index: 2;
+      }
+      #frame b svg,
+      #frame b img {
+        width: 86%;
+        height: 86%;
+        display: block;
+        border-radius: 50%;
+      }
+      #frame .c1 {
+        top: 0;
+        left: 0;
+      }
+      #frame .c2 {
+        top: 0;
+        right: 0;
+      }
+      #frame .c3 {
+        bottom: 0;
+        left: 0;
+      }
+      #frame .c4 {
+        bottom: 0;
+        right: 0;
+      }
+      header {
+        text-align: center;
+        margin-bottom: 34px;
+      }
+      .wm {
+        font:
+          900 clamp(64px, 13vw, 128px)/1 Fraunces,
+          Georgia,
+          serif;
+        letter-spacing: -0.02em;
+        display: inline-block;
+        position: relative;
+        padding-bottom: 0.5em;
+      }
+      .wm > span {
+        font-weight: 900;
+        display: inline-block;
+        position: relative;
+        color: var(--forest);
+      }
+      .wm .i {
+        width: 0.3em;
+      }
+      .wm .dot {
+        position: absolute;
+        left: 50%;
+        top: -0.05em;
+        width: 0.38em;
+        height: 0.38em;
+        transform: translateX(-50%);
+        display: block;
+      }
+      .wm .dot svg,
+      .wm .dot img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        border-radius: 50%;
+      }
+      .wm .tail {
+        position: absolute;
+        right: -0.05em;
+        bottom: 0.04em;
+        width: 2.22em;
+        height: 0.4em;
+        color: var(--moss);
+      }
+      .tail svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .tail b {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        font:
+          700 0.17em/1 'Noto Sans Devanagari',
+          sans-serif;
+        background: var(--cream);
+        padding: 0.25em 0.6em;
+        color: #c5604f;
+        white-space: nowrap;
+        border-radius: 99px;
+      }
+      .tag {
+        font:
+          500 clamp(18px, 2.4vw, 26px)/1.3 Fraunces,
+          Georgia,
+          serif;
+        color: var(--moss);
+        margin: 8px 0 0;
+      }
+      .card {
+        max-width: 1080px;
+        margin: 0 auto;
+        background: #fffcf6cc;
+        border: 1px solid #d9d2bd;
+        border-radius: 26px;
+        padding: clamp(22px, 4vw, 44px);
+        box-shadow: 0 30px 60px -34px #22372b66;
+      }
+      .steps {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 24px;
+        flex-wrap: wrap;
+      }
+      .steps i {
+        font: 600 12px Inter;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 6px 12px;
+        border-radius: 99px;
+        background: var(--sand);
+        color: #6b7a64;
+        font-style: normal;
+      }
+      .steps i.on {
+        background: var(--forest);
+        color: #fff;
+      }
+      .steps i.done {
+        background: #cfdac4;
+        color: var(--forest);
+      }
+      h2 {
+        font:
+          500 clamp(28px, 4vw, 42px)/1.1 Fraunces,
+          Georgia,
+          serif;
+        margin: 0 0 6px;
+        letter-spacing: -0.01em;
+      }
+      .sub {
+        color: #5b6b57;
+        margin: 0 0 22px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+        gap: 14px;
+      }
+      .opt {
+        all: unset;
+        box-sizing: border-box;
+        cursor: pointer;
+        background: #fff;
+        border: 1.5px solid #ddd5bf;
+        border-radius: 18px;
+        padding: 18px;
+        display: block;
+        transition: 0.15s;
+      }
+      .opt:hover {
+        border-color: var(--sage);
+        transform: translateY(-2px);
+      }
+      .opt.on {
+        border-color: var(--forest);
+        box-shadow: 0 0 0 3px #8a9a7b55;
+      }
+      .opt b {
+        display: block;
+        font:
+          600 18px Fraunces,
+          Georgia,
+          serif;
+        margin-bottom: 4px;
+      }
+      .opt small {
+        color: #66745f;
+        font-size: 13px;
+      }
+      textarea,
+      input[type='text'] {
+        width: 100%;
+        font: 16px Inter;
+        padding: 14px 16px;
+        border: 1.5px solid #ddd5bf;
+        border-radius: 14px;
+        background: #fff;
+        color: var(--ink);
+        resize: vertical;
+      }
+      textarea:focus,
+      input:focus {
+        outline: 3px solid #8a9a7b66;
+      }
+      label {
+        display: block;
+        font: 600 13px Inter;
+        margin: 16px 0 6px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #5b6b57;
+      }
+      .btn {
+        all: unset;
+        cursor: pointer;
+        background: var(--forest);
+        color: #fff;
+        padding: 13px 24px;
+        border-radius: 99px;
+        font: 600 15px Inter;
+      }
+      .btn:hover {
+        background: var(--moss);
+      }
+      .btn[disabled] {
+        opacity: 0.35;
+        cursor: not-allowed;
+      }
+      .btn.g {
+        background: transparent;
+        color: var(--forest);
+        border: 1.5px solid var(--forest);
+        padding: 11.5px 22px;
+      }
+      .btn.r {
+        background: var(--rose);
+        color: #3a1510;
+      }
+      .nav {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 28px;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .chips {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
+      .chip {
+        all: unset;
+        cursor: pointer;
+        background: #fff;
+        border: 1.5px dashed var(--rose);
+        border-radius: 14px;
+        padding: 10px 14px;
+        font-size: 14px;
+        max-width: 300px;
+      }
+      .chip.on {
+        background: #fbe3de;
+        border-style: solid;
+      }
+      .chip b {
+        display: block;
+        font:
+          600 16px Fraunces,
+          serif;
+      }
+      .sw {
+        display: flex;
+        gap: 6px;
+        margin-top: 10px;
+      }
+      .sw u {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: 1px solid #0002;
+      }
+      .ar {
+        display: inline-block;
+        border: 2px solid var(--forest);
+        border-radius: 4px;
+        margin-bottom: 10px;
+        background: #e4ebd9;
+      }
+      .out {
+        display: flex;
+        gap: 26px;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        margin-top: 10px;
+      }
+      figure {
+        margin: 0;
+      }
+      .pw {
+        overflow: hidden;
+        box-shadow: 0 18px 40px -18px #22372b88;
+        border-radius: 4px;
+        background: #fff;
+        display: block;
+        padding: 0;
+        border: 0;
+        cursor: zoom-in;
+      }
+      .pw:focus-visible {
+        outline: 3px solid var(--rose);
+        outline-offset: 4px;
+      }
+      .pw > div {
+        transform-origin: 0 0;
+      }
+      figcaption {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+        font: 600 13px Inter;
+      }
+      .mini {
+        all: unset;
+        cursor: pointer;
+        font: 600 13px Inter;
+        background: var(--forest);
+        color: #fff;
+        padding: 7px 14px;
+        border-radius: 99px;
+      }
+      .impbox {
+        margin-top: 16px;
+        background: #f3f6ec;
+        border: 1.5px solid #cfdac4;
+        border-radius: 16px;
+        padding: 14px 16px;
+      }
+      .impbox b {
+        font: 600 12px Inter;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #5b6b57;
+      }
+      .impbox p {
+        margin: 6px 0 10px;
+        font:
+          500 17px/1.35 Fraunces,
+          Georgia,
+          serif;
+      }
+      .tg {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-top: 20px;
+        font: 600 15px Inter;
+        text-transform: none;
+        letter-spacing: 0;
+        color: var(--ink);
+      }
+      .tg input {
+        width: 18px;
+        height: 18px;
+        accent-color: var(--forest);
+      }
+      .tg small {
+        font-weight: 400;
+        color: #66745f;
+      }
+      #toast {
+        position: fixed;
+        left: 50%;
+        bottom: 58px;
+        transform: translate(-50%, 20px);
+        opacity: 0;
+        transition: 0.25s;
+        background: var(--forest);
+        color: #fff;
+        padding: 10px 18px;
+        border-radius: 99px;
+        font:
+          600 13px Inter,
+          sans-serif;
+        z-index: 70;
+        pointer-events: none;
+        max-width: 90vw;
+        text-align: center;
+      }
+      #toast.on {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+      .preview[hidden] {
+        display: none;
+      }
+      .preview {
+        position: fixed;
+        inset: 0;
+        z-index: 80;
+        display: flex;
+        flex-direction: column;
+        padding: clamp(12px, 2.4vw, 28px);
+        background: #101b16f5;
+        color: #fff;
+      }
+      .preview-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+      .preview-title {
+        margin: 0;
+        font: 700 18px/1.2 Inter, sans-serif;
+      }
+      .preview-dimensions {
+        margin: 4px 0 0;
+        color: #d4dfd6;
+        font: 400 13px/1.3 Inter, sans-serif;
+      }
+      .preview-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .preview-actions button {
+        min-width: 42px;
+        min-height: 40px;
+        padding: 8px 12px;
+        border: 1px solid #ffffff55;
+        border-radius: 999px;
+        background: #ffffff12;
+        color: #fff;
+        font: 600 14px Inter, sans-serif;
+        cursor: pointer;
+      }
+      .preview-actions button:hover {
+        background: #ffffff2b;
+      }
+      #preview-zoom-level {
+        min-width: 48px;
+        text-align: center;
+        font: 600 13px Inter, sans-serif;
+      }
+      .preview-viewport {
+        flex: 1;
+        min-height: 0;
+        overflow: auto;
+        display: flex;
+        align-items: safe center;
+        justify-content: safe center;
+        margin-top: 16px;
+        border: 1px solid #ffffff20;
+        border-radius: 12px;
+        background:
+          linear-gradient(45deg, #ffffff08 25%, transparent 25% 75%, #ffffff08 75%) 0 0 / 24px 24px,
+          linear-gradient(45deg, #ffffff08 25%, transparent 25% 75%, #ffffff08 75%) 12px 12px / 24px 24px,
+          #0b130f;
+      }
+      #preview-content {
+        flex: none;
+        position: relative;
+      }
+      @media (max-width: 600px) {
+        .preview-bar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+        .preview-actions {
+          width: 100%;
+          justify-content: flex-end;
+        }
+        .preview-viewport {
+          margin-top: 10px;
+        }
+      }
+      .sp {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border: 2px solid #fff6;
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: s 0.8s linear infinite;
+        vertical-align: -2px;
+        margin-right: 6px;
+      }
+      @keyframes s {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="frame" aria-hidden="true">
+      <i class="bt"></i><i class="bb"></i><i class="bl"></i><i class="br"></i
+      ><b class="c1"></b><b class="c2"></b><b class="c3"></b><b class="c4"></b>
+    </div>
+    <header>
+      <div class="wm" id="wm" aria-label="Shilpam"></div>
+      <p class="tag">Tell us the idea. Shilpam crafts the poster.</p>
+    </header>
+    <main class="card" id="app"></main>
+    <div
+      id="poster-preview"
+      class="preview"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="preview-title"
+      hidden>
+      <div class="preview-bar">
+        <div>
+          <h2 class="preview-title" id="preview-title">Poster preview</h2>
+          <p class="preview-dimensions" id="preview-dimensions"></p>
+        </div>
+        <div class="preview-actions">
+          <button type="button" id="preview-zoom-out" aria-label="Zoom out">−</button>
+          <span id="preview-zoom-level" aria-live="polite">100%</span>
+          <button type="button" id="preview-zoom-in" aria-label="Zoom in">+</button>
+          <button type="button" id="preview-fit">Fit</button>
+          <button type="button" id="preview-close">Close</button>
+        </div>
+      </div>
+      <div id="preview-viewport" class="preview-viewport" tabindex="0">
+        <div id="preview-content"></div>
+      </div>
+    </div>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script src="config.js"></script>
+    <script>
+      const $ = (s) => document.querySelector(s),
+        esc = (s) =>
+          String(s).replace(
+            /[&<>"']/g,
+            (c) =>
+              ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;',
+              })[c],
+          )
+      function mand(c, f = 'none', n = 12, sw = 2, st = '') {
+        let p = ''
+        for (let i = 0; i < n; i++)
+          p += `<ellipse cx="50" cy="25" rx="6.5" ry="17" transform="rotate(${(i * 360) / n} 50 50)" fill="none" stroke="${c}" stroke-width="${sw}"/><circle cx="50" cy="4" r="2" transform="rotate(${(i * 360) / n} 50 50)" fill="${c}"/>`
+        return `<svg viewBox="0 0 100 100" style="${st}">${p}<circle cx="50" cy="50" r="28" fill="none" stroke="${c}" stroke-width="${sw}"/><circle cx="50" cy="50" r="17" fill="${f}" stroke="${c}" stroke-width="${sw}"/><circle cx="50" cy="50" r="6" fill="#E58F83"/></svg>`
+      }
+      const CG = window.SHILPAM || {}
+      function cropImg(o) {
+        return new Promise((ok, no) => {
+          if (!o || !o.src || !o.crop) return no()
+          const im = new Image()
+          im.onload = () => {
+            try {
+              const W = im.naturalWidth,
+                H = im.naturalHeight,
+                c = o.crop
+              let sx = W * c.x,
+                sy = H * c.y,
+                sw = W * c.w,
+                sh = H * c.h
+              if (o.circle) {
+                const m = Math.min(sw, sh)
+                sx += (sw - m) / 2
+                sy += (sh - m) / 2
+                sw = sh = m
+              }
+              const k = Math.min(1, 700 / Math.max(sw, sh)),
+                cv = document.createElement('canvas')
+              cv.width = Math.max(1, Math.round(sw * k))
+              cv.height = Math.max(1, Math.round(sh * k))
+              const g = cv.getContext('2d')
+              if (o.circle) {
+                g.beginPath()
+                g.arc(cv.width / 2, cv.height / 2, cv.width / 2, 0, 7)
+                g.clip()
+              }
+              g.drawImage(im, sx, sy, sw, sh, 0, 0, cv.width, cv.height)
+              ok(cv.toDataURL('image/png'))
+            } catch (e) {
+              no(e)
+            }
+          }
+          im.onerror = () => no()
+          im.src = o.src
+        })
+      }
+      function tailSVG() {
+        let u = ''
+        for (let i = 0; i < 5; i++) {
+          u += `<g transform="translate(${i * 40} 0)"><path d="M0 18C10 4 30 32 40 18"/><path d="M11 9q4-5 7 0q-2 3-5 1M29 27q4 5 7 0q-2-3-5-1"/><g transform="translate(20 18)" fill="#F6F1E7"><ellipse cx="0" cy="-6" rx="2.8" ry="6" transform="rotate(-48)"/><ellipse cx="0" cy="-6" rx="2.8" ry="6" transform="rotate(48)"/><ellipse cx="0" cy="-6.5" rx="2.8" ry="6.5"/><circle r="2" fill="#E58F83" stroke="none"/></g><circle cx="0" cy="18" r="1.8" fill="#E58F83" stroke="none"/></g>`
+        }
+        return `<svg viewBox="0 0 200 36" preserveAspectRatio="none" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M0 3H200M0 33H200" stroke-width="1.2"/>${u}</svg>`
+      }
+      $('#wm').innerHTML =
+        '<span>s</span><span>h</span><span class="i">ı<i class="dot">' +
+        mand('#E58F83', '#F6F1E7', 8, 5.5) +
+        '</i></span><span>l</span><span>p</span><span>a</span><span>m</span><span class="tail" aria-hidden="true">' +
+        tailSVG() +
+        '<b>शिल्पम्</b></span>'
+      document
+        .querySelectorAll('#frame b')
+        .forEach((b) => (b.innerHTML = mand('#3F5A47', 'none', 12, 2.4)))
+      cropImg(CG.mandala)
+        .then((u) =>
+          document
+            .querySelectorAll('.wm .dot,#frame b')
+            .forEach((d) => (d.innerHTML = '<img alt="" src="' + u + '">')),
+        )
+        .catch(() => {})
+      cropImg(CG.border)
+        .then((u) =>
+          document.documentElement.style.setProperty(
+            '--tile',
+            'url(' + u + ')',
+          ),
+        )
+        .catch(() => {})
+      let tt
+      const toast = (m) => {
+        const e = $('#toast')
+        e.textContent = m
+        e.classList.add('on')
+        clearTimeout(tt)
+        tt = setTimeout(() => e.classList.remove('on'), 4200)
+      }
+      const log = () => {}
+      const save = () => {
+        try {
+          const { busy, fullPosters, ...r } = S
+          delete r.img
+          delete r.wantImg
+          localStorage.setItem('shilpam:v1', JSON.stringify(r))
+        } catch (e) {}
+      }
+      const ai = async (body, url = '/api/ai', ms = 20000) => {
+        const c = new AbortController(),
+          t = setTimeout(() => c.abort(), ms)
+        try {
+          const r = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+            signal: c.signal,
+          })
+          const j = await r.json()
+          if (!r.ok || !j.ok) {
+            const error = new Error(j.code || 'fail')
+            if (j.detail) error.message += `: ${j.detail}`
+            throw error
+          }
+          return j.data
+        } finally {
+          clearTimeout(t)
+        }
+      }
+      const apiError = (e) => (e && e.message) || 'invalid_response'
+      const TYPES = [
+        ['event', 'Event invite', 'Concerts, meetups, workshops, weddings'],
+        ['launch', 'Product launch', 'New product, app or feature'],
+        ['festival', 'Festival greeting', 'Diwali, Eid, Christmas, birthdays'],
+        ['offer', 'Sale or offer', 'Discounts, limited deals'],
+        ['news', 'Announcement', 'Hiring, milestones, updates'],
+        ['quote', 'Quote or thought', 'A line worth sharing'],
+      ]
+      const STYLES = {
+        nature: [
+          'Shilpam calm',
+          'Cream, sage and a blush of light red. Serif, mandala motif.',
+        ],
+        street: ['Bold street', 'Loud caps, halftone, sticker badge.'],
+        swiss: ['Minimal swiss', 'Grid, whitespace, one light-red dot.'],
+        pop: ['Festive pop', 'Gradient, confetti, starburst.'],
+        ai: ['AI art director', 'AI picks a custom palette for your topic.'],
+      }
+      const SZ = {
+        ig_4x5: { w: 1080, h: 1350, l: 'Instagram portrait', r: '4:5', textPlacement: 'bottom' },
+        ig_1x1: { w: 1080, h: 1080, l: 'Instagram square', r: '1:1', textPlacement: 'bottom' },
+        yt_16x9: { w: 1920, h: 1080, l: 'YouTube thumbnail', r: '16:9', textPlacement: 'left' },
+        li_191: { w: 1200, h: 628, l: 'LinkedIn landscape feed post', r: '1.91:1', textPlacement: 'left' },
+      }
+      const ST = {
+        nature: {
+          p: { bg: '#F4EEDF', fg: '#22372B', a: '#E58F83', b: '#8A9A7B' },
+          d: 'Fraunces,Georgia,serif',
+          cs: 't',
+          al: 'l',
+          ld: 1.02,
+          av: 0.56,
+          tr: '-.02em',
+        },
+        street: {
+          p: { bg: '#1c1c1c', fg: '#f4f1e8', a: '#ffe600', b: '#ff3b2f' },
+          d: "Anton,Impact,'Arial Narrow',sans-serif",
+          cs: 'u',
+          al: 'l',
+          ld: 0.95,
+          av: 0.5,
+          tr: '.01em',
+        },
+        swiss: {
+          p: { bg: '#f1f0ec', fg: '#161616', a: '#EE8B7E', b: '#161616' },
+          d: 'Inter,Helvetica,Arial,sans-serif',
+          cs: 'l',
+          al: 'l',
+          ld: 1,
+          av: 0.6,
+          tr: '-.03em',
+        },
+        pop: {
+          p: {
+            bg: 'linear-gradient(135deg,#ff7aa2,#ffb347)',
+            fg: '#fff',
+            a: '#fff3a3',
+            b: '#5b2bff',
+          },
+          d: "Fredoka,'Trebuchet MS',sans-serif",
+          cs: 't',
+          al: 'c',
+          ld: 1.05,
+          av: 0.62,
+          tr: '0',
+        },
+      }
+      const S = {
+        step: 0,
+        type: null,
+        topic: '',
+        extra: '',
+        ideas: [],
+        pick: null,
+        style: 'nature',
+        pf: ['ig_4x5', 'yt_16x9'],
+        copy: null,
+        pal: null,
+        busy: false,
+        imp: null,
+        fullPosters: null,
+      }
+      const STEPN = ['Post type', 'Your idea', 'Design', 'Platform', 'Poster']
+      function go(n) {
+        S.step = n
+        draw()
+      }
+      function set(k, v) {
+        S[k] = v
+        draw()
+      }
+      function draw() {
+        const a = $('#app')
+        let h =
+            '<div class="steps">' +
+            STEPN.map(
+              (t, i) =>
+                `<i class="${
+                  i == S.step ? 'on'
+                  : i < S.step ? 'done'
+                  : ''
+                }">${i + 1} · ${t}</i>`,
+            ).join('') +
+            '</div>',
+          nav = ''
+        if (S.step == 0) {
+          h +=
+            '<h2>What are we making today?</h2><p class="sub">Choose the kind of post. This shapes the tone of the words Shilpam writes.</p><div class="grid">' +
+            TYPES.map(
+              (t) =>
+                `<button class="opt ${S.type == t[0] ? 'on' : ''}" onclick="set('type','${t[0]}')"><b>${t[1]}</b><small>${t[2]}</small></button>`,
+            ).join('') +
+            '</div>'
+          nav = `<span></span><button class="btn" ${S.type ? '' : 'disabled'} onclick="go(1)">Continue</button>`
+        }
+        if (S.step == 1) {
+          h += `<h2>Tell us about it</h2><p class="sub">A sentence or two is plenty. AI handles the rest.</p><label>Your idea</label><textarea id="tp" rows="3" placeholder="e.g. Rooftop jazz night for the neighbourhood, Saturday 7pm" oninput="S.topic=this.value;S.fullPosters=null;S.imp=null;$('#nx').disabled=S.topic.trim().length<3">${esc(S.topic)}</textarea><label>Extra details (optional)</label><input type="text" id="ex" placeholder="Date, place, brand name…" value="${esc(S.extra)}" oninput="S.extra=this.value;S.fullPosters=null"><div style="margin-top:16px"><button class="btn r" id="sp" onclick="ideas()">✦ Spark ideas with AI</button> <button class="btn g" id="imp" onclick="improve()">✦ Improve my idea</button></div>${S.imp && !S.imp.used ? `<div class="impbox"><b>Sharper version</b><p>${esc(S.imp.idea)}</p><button class="mini" onclick="useImp()">Use this idea</button></div>` : ''}<div class="chips">${S.ideas.map((x, i) => `<button class="chip ${S.pick == i ? 'on' : ''}" onclick="S.pick=${i};S.fullPosters=null;draw()"><b>${esc(x.headline)}</b>${esc(x.angle || '')}</button>`).join('')}</div>`
+          nav = `<button class="btn g" onclick="go(0)">Back</button><button class="btn" id="nx" ${S.topic.trim().length >= 3 ? '' : 'disabled'} onclick="go(2)">Continue</button>`
+        }
+        if (S.step == 2) {
+          h +=
+            '<h2>Choose a design direction</h2><p class="sub">Same words, different designer. Try the AI art director for a palette made for your topic.</p><div class="grid">' +
+            Object.keys(STYLES)
+              .map((k) => {
+                const p =
+                  k == 'ai' ?
+                    { bg: '#F4EEDF', fg: '#22372B', a: '#E58F83', b: '#8A9A7B' }
+                  : ST[k].p
+                return `<button class="opt ${S.style == k ? 'on' : ''}" onclick="S.style='${k}';S.pal=null;S.fullPosters=null;draw()"><b>${STYLES[k][0]}</b><small>${STYLES[k][1]}</small><div class="sw">${[p.bg.startsWith('l') ? '#ff7aa2' : p.bg, p.fg, p.a, p.b].map((c) => `<u style="background:${c}"></u>`).join('')}</div></button>`
+              })
+              .join('') +
+            '</div>'
+          nav = `<button class="btn g" onclick="go(1)">Back</button><button class="btn" onclick="go(3)">Continue</button>`
+        }
+        if (S.step == 3) {
+          h +=
+            '<h2>Where will it live?</h2><p class="sub">Pick one or more. Cloudflare creates fresh artwork for each platform; Shilpam adds your exact short text. If generation fails, the default layout is used.</p><div class="grid">' +
+            Object.entries(SZ)
+              .map(([k, z]) => {
+                const s = (46 / Math.max(z.w, z.h)) * 1,
+                  w = Math.round(z.w * s * 1.5),
+                  hh = Math.round(z.h * s * 1.5)
+                return `<button class="opt ${S.pf.includes(k) ? 'on' : ''}" onclick="tp('${k}')"><span class="ar" style="width:${w}px;height:${hh}px"></span><b>${z.l}</b><small>${z.r} · ${z.w}×${z.h}</small></button>`
+              })
+              .join('') +
+            '</div>'
+          nav = `<button class="btn g" onclick="go(2)">Back</button><button class="btn" ${S.pf.length ? '' : 'disabled'} onclick="go(4);make()">Generate poster</button>`
+        }
+        if (S.step == 4) {
+          h +=
+            '<h2 id="h4">Crafting…</h2><p class="sub" id="s4"></p><div class="out" id="out"></div>'
+          nav = `<button class="btn g" onclick="go(3)">Back</button><span><button class="btn g" onclick="make(1)">Rewrite copy</button> <button class="btn" onclick="reset()">New poster</button></span>`
+        }
+        a.innerHTML = h + `<div class="nav">${nav}</div>`
+        if (S.step == 4 && S.copy) show()
+        save()
+      }
+      const tp = (k) => {
+        S.pf = S.pf.includes(k) ? S.pf.filter((x) => x != k) : [...S.pf, k]
+        S.fullPosters = null
+        draw()
+      }
+      const reset = () => {
+        Object.assign(S, {
+          step: 0,
+          type: null,
+          topic: '',
+          extra: '',
+          ideas: [],
+          pick: null,
+          copy: null,
+          pal: null,
+          imp: null,
+          fullPosters: null,
+        })
+        draw()
+      }
+      async function improve() {
+        if (S.topic.trim().length < 3) {
+          $('#tp').focus()
+          return
+        }
+        const b = $('#imp')
+        b.innerHTML =
+          '<span class="sp" style="border-color:#22372b44;border-top-color:#22372b"></span>Improving…'
+        try {
+          S.imp = await ai(
+            { type: S.type, topic: S.topic, extra: S.extra, style: S.style },
+            '/api/improve',
+            25000,
+          )
+        } catch (e) {
+          S.imp = null
+          toast(`Idea improvement failed (${apiError(e)}). Your idea is unchanged.`)
+        }
+        draw()
+      }
+      const useImp = () => {
+        if (S.imp) {
+          S.topic = S.imp.idea
+          S.imp.used = true
+          S.fullPosters = null
+          draw()
+        }
+      }
+      async function ideas() {
+        if (S.topic.trim().length < 3) {
+          $('#tp').focus()
+          return
+        }
+        const b = $('#sp')
+        b.innerHTML = '<span class="sp"></span>Thinking…'
+        try {
+          const r = await ai({
+            task: 'ideas',
+            type: S.type,
+            topic: S.topic,
+            extra: S.extra,
+          })
+          S.ideas = (Array.isArray(r) ? r : [])
+            .filter(
+              (x) =>
+                x && typeof x.headline == 'string' && x.headline.length < 46,
+            )
+            .slice(0, 4)
+          if (!S.ideas.length) throw 0
+        } catch (e) {
+          S.ideas = fbIdeas()
+          toast(`AI ideas failed (${apiError(e)}). Showing built-in ideas.`)
+        }
+        S.pick = null
+        draw()
+      }
+      const trim = (t, n) => {
+        let w = t.trim().split(/\s+/).slice(0, n)
+        while (
+          w.length > 1 &&
+          /^(for|the|a|an|of|and|in|on|at|to|with|by|from)$/i.test(
+            w[w.length - 1],
+          )
+        )
+          w.pop()
+        return w.join(' ').replace(/[,.;:]+$/, '')
+      }
+      const fbIdeas = () => {
+        const t = S.topic.trim(),
+          w = trim(t, 4)
+        return [
+          { headline: w, angle: 'Straight and clear' },
+          { headline: 'Save the date', angle: 'Urgency-first hook' },
+          { headline: 'You’re invited', angle: 'Warm and personal' },
+          { headline: w + '.', angle: 'Confident, minimal' },
+        ]
+      }
+      const vo = {
+        nature: 'warm, thoughtful, human',
+        street: 'loud, short, streetwear flyer',
+        swiss: 'calm, precise, understated',
+        pop: 'joyful, playful',
+        ai: 'confident and fitting the topic',
+      }
+      const okc = (c) =>
+        c &&
+        ['headline', 'kicker', 'sub', 'cta'].every(
+          (k) => typeof c[k] == 'string' && c[k].trim(),
+        ) &&
+        c.headline.length <= 40 &&
+        c.kicker.length <= 24 &&
+        c.sub.length <= 90 &&
+        c.cta.length <= 18
+      function fbCopy() {
+        const t = S.topic.trim(),
+          lo = t[0].toLowerCase() + t.slice(1),
+          hd = trim(S.pick != null ? S.ideas[S.pick].headline : t, 4)
+        return {
+          headline: hd,
+          kicker: {
+            event: 'EVENT',
+            launch: 'LAUNCH',
+            festival: 'FESTIVAL',
+            offer: 'SALE',
+            news: 'NEWS',
+            quote: 'QUOTE',
+          }[S.type],
+          sub: trim(S.extra || `All about ${lo}.`, 5),
+          cta:
+            S.type == 'offer' ? 'Shop now'
+            : S.type == 'quote' ? 'Share'
+            : 'Join in',
+        }
+      }
+      const lum = (h) => {
+        const m = /^#?([0-9a-f]{6})$/i.exec(h)
+        if (!m) return null
+        const v = [0, 2, 4]
+          .map((i) => parseInt(m[1].substr(i, 2), 16) / 255)
+          .map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4))
+        return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]
+      }
+      const cr = (a, b) => {
+        const x = lum(a),
+          y = lum(b)
+        return x == null || y == null ?
+            0
+          : (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05)
+      }
+      const ink = (h) => ((lum(h) ?? 1) > 0.4 ? '#161616' : '#fff')
+      async function make(re) {
+        S.busy = true
+        S.fullPosters = null
+        $('#out').innerHTML = ''
+        $('#h4').innerHTML =
+          '<span class="sp" style="border-color:#22372b44;border-top-color:#22372b"></span>Crafting…'
+        $('#s4').textContent =
+          'Writing the copy' +
+          (S.style == 'ai' ? ' and choosing a palette' : '') +
+          '.'
+        let c = null,
+          src = 'built-in templates'
+        try {
+          c = await ai({
+            task: 'copy',
+            type: S.type,
+            topic: S.topic,
+            extra: S.extra,
+            style: S.style,
+            pick: S.pick != null ? S.ideas[S.pick] : null,
+            platforms: S.pf.map((k) => SZ[k].l),
+          })
+          if (!okc(c)) throw 0
+          src = 'AI'
+        } catch (e) {
+          c = fbCopy()
+          toast(`AI copy failed (${apiError(e)}). Using built-in wording.`)
+        }
+        S.copy = { ...c, src }
+        if (S.style == 'ai' && !S.pal) {
+          try {
+            const p = await ai({
+              task: 'palette',
+              type: S.type,
+              topic: S.topic,
+            })
+            if (cr(p.bg, p.fg) < 4.5 || !lum(p.a) || !lum(p.b)) throw 0
+            S.pal = p
+          } catch (e) {
+            S.pal = null
+            toast(`AI palette failed (${apiError(e)}). Using the default palette.`)
+          }
+        }
+        $('#s4').textContent =
+          `Cloudflare is creating image-led artwork for each platform; Shilpam will add your exact, minimal copy.`
+        try {
+          const results = await Promise.allSettled(
+            S.pf.map(async (platform) => {
+              const image = await ai(
+                {
+                  type: S.type,
+                  topic: S.topic,
+                  extra: S.extra,
+                  style: S.style,
+                  platform,
+                  visual: S.imp ? S.imp.visual : '',
+                },
+                '/api/image',
+                60000,
+              )
+              const resized = await fitPosterImage(image, platform)
+              return [platform, resized]
+            }),
+          )
+          const failed = results.find((result) => result.status == 'rejected')
+          if (failed) throw failed.reason
+          S.fullPosters = Object.fromEntries(results.map((result) => result.value))
+          toast('Cloudflare created the artwork; exact copy was overlaid.')
+        } catch (e) {
+          S.fullPosters = null
+          toast(`Cloudflare poster failed (${apiError(e)}). Using the default Shilpam layout.`)
+        }
+        S.busy = false
+        show()
+        save()
+      }
+      function show() {
+        const o = $('#out')
+        if (!o) return
+        $('#h4').textContent = 'Your poster set'
+        $('#s4').textContent =
+          S.fullPosters ?
+            'Each platform has its own Cloudflare artwork with the exact poster copy added by Shilpam.'
+          : 'Showing the default Shilpam layout. Full generated images are not stored across refreshes.'
+        o.innerHTML = ''
+        S.pf.forEach((k) => {
+          const z = SZ[k],
+            sc = Math.min(300 / z.h, 520 / z.w),
+            f = document.createElement('figure')
+          f.innerHTML = `<button type="button" class="pw" aria-label="View ${z.l} poster full size, ${z.w} by ${z.h} pixels" style="width:${z.w * sc}px;height:${z.h * sc}px"><div style="width:${z.w}px;height:${z.h}px;transform:scale(${sc})" id="p_${k}"></div></button><figcaption><span>${z.l} · ${z.w}×${z.h} · Click to enlarge</span><button class="mini" onclick="exp('${k}')">Export PNG</button></figcaption>`
+          o.append(f)
+          const n = f.querySelector('#p_' + k)
+          f.querySelector('.pw').addEventListener('click', () => openPreview(k))
+          n.append(poster(k))
+          fitAll(n)
+        })
+        log('Rendered ' + S.pf.length + ' size(s).')
+      }
+      let previewPlatform = null,
+        previewScale = 1,
+        previewMinScale = 0.25,
+        previewTrigger = null
+      function updatePreviewScale() {
+        if (!previewPlatform) return
+        const z = SZ[previewPlatform],
+          content = $('#preview-content'),
+          poster = content.firstElementChild
+        if (!poster) return
+        poster.style.transformOrigin = 'top left'
+        poster.style.transform = `scale(${previewScale})`
+        content.style.width = `${Math.round(z.w * previewScale)}px`
+        content.style.height = `${Math.round(z.h * previewScale)}px`
+        $('#preview-zoom-level').textContent = `${Math.round(previewScale * 100)}%`
+      }
+      function fitPreview() {
+        if (!previewPlatform) return
+        const z = SZ[previewPlatform],
+          viewport = $('#preview-viewport')
+        const fitScale = Math.min(
+          1,
+          Math.max(1, viewport.clientWidth - 48) / z.w,
+          Math.max(1, viewport.clientHeight - 48) / z.h,
+        )
+        previewMinScale = Math.min(0.25, fitScale)
+        previewScale = fitScale
+        updatePreviewScale()
+      }
+      function zoomPreview(factor) {
+        previewScale = Math.max(previewMinScale, Math.min(3, previewScale * factor))
+        updatePreviewScale()
+      }
+      function openPreview(k) {
+        const source = $('#p_' + k)
+        if (!source || !source.firstElementChild) return
+        previewPlatform = k
+        previewTrigger = source.closest('.pw')
+        $('#preview-title').textContent = `${SZ[k].l} poster`
+        $('#preview-dimensions').textContent = `${SZ[k].w} × ${SZ[k].h} pixels · scroll to pan when zoomed`
+        const content = $('#preview-content')
+        content.replaceChildren(source.firstElementChild.cloneNode(true))
+        $('#poster-preview').hidden = false
+        document.body.style.overflow = 'hidden'
+        requestAnimationFrame(fitPreview)
+        $('#preview-close').focus()
+      }
+      function closePreview() {
+        $('#poster-preview').hidden = true
+        $('#preview-content').replaceChildren()
+        document.body.style.overflow = ''
+        previewPlatform = null
+        if (previewTrigger && previewTrigger.isConnected) previewTrigger.focus()
+        previewTrigger = null
+      }
+      $('#preview-close').addEventListener('click', closePreview)
+      $('#preview-zoom-in').addEventListener('click', () => zoomPreview(1.25))
+      $('#preview-zoom-out').addEventListener('click', () => zoomPreview(0.8))
+      $('#preview-fit').addEventListener('click', fitPreview)
+      $('#poster-preview').addEventListener('click', (event) => {
+        if (event.target.id == 'poster-preview') closePreview()
+      })
+      document.addEventListener('keydown', (event) => {
+        const dialog = $('#poster-preview')
+        if (dialog.hidden) return
+        if (event.key == 'Escape') closePreview()
+        else if (event.key == '+' || event.key == '=') zoomPreview(1.25)
+        else if (event.key == '-' || event.key == '_') zoomPreview(0.8)
+        else if (event.key == 'Tab') {
+          const focusable = [...dialog.querySelectorAll('button:not([disabled]), [tabindex="0"]')]
+          const first = focusable[0],
+            last = focusable[focusable.length - 1]
+          if (event.shiftKey && document.activeElement == first) {
+            event.preventDefault()
+            last.focus()
+          } else if (!event.shiftKey && document.activeElement == last) {
+            event.preventDefault()
+            first.focus()
+          }
+        }
+      })
+      window.addEventListener('resize', () => {
+        if (!$('#poster-preview').hidden) fitPreview()
+      })
+      const cs = (t, m) =>
+        m == 'u' ? t.toUpperCase()
+        : m == 'l' ? t.toLowerCase()
+        : t.replace(/(^|\s)\S/g, (c) => c.toUpperCase())
+      function fit(t, w, h, s, mx) {
+        const ws = t.split(/\s+/),
+          lw = Math.max(...ws.map((x) => x.length))
+        for (let f = mx; f >= 24; f -= 2) {
+          const cpl = Math.floor(w / (f * s.av * (1 + parseFloat(s.tr))))
+          if (cpl < lw) continue
+          let l = 1,
+            c = 0
+          for (const x of ws) {
+            if (c && c + 1 + x.length > cpl) {
+              l++
+              c = x.length
+            } else c += (c ? 1 : 0) + x.length
+          }
+          if (l * f * s.ld <= h) return f
+        }
+        return 24
+      }
+      function poster(k) {
+        const { w, h } = SZ[k]
+        if (S.fullPosters && S.fullPosters[k]) return cloudPoster(k)
+        const
+          sk = S.style,
+          s = ST[sk == 'ai' ? 'nature' : sk],
+          P = sk == 'ai' && S.pal ? S.pal : s.p,
+          c = S.copy,
+          mn = Math.min(w, h),
+          land = w / h > 1.5,
+          m = Math.round(mn * 0.07),
+          rw = land ? Math.round(w * 0.34) : 0,
+          rh = land ? 0 : Math.round(h * 0.24),
+          bw = w - 2 * m - rw,
+          bh = h - 2 * m - rh,
+          kf = Math.round(mn * 0.032),
+          sf = Math.round(mn * 0.04),
+          g = Math.round(m / 2),
+          sh = Math.ceil(
+            Math.ceil((c.sub.length * sf * 0.55) / (bw * 0.92)) * sf * 1.3,
+          ),
+          hh = bh - kf * 2 - sh - 2 * g,
+          d =
+            land ?
+              Math.round(Math.min(rw, h - 2 * m) * 0.9)
+            : Math.round(rh * 0.95),
+          bx =
+            land ? w - m - rw + Math.round((rw - d) / 2)
+            : s.al == 'c' ? Math.round((w - d) / 2)
+            : w - m - d,
+          by = land ? Math.round((h - d) / 2) : h - m - d,
+          z =
+            land ?
+              { x: w - rw - m, y: 0, w: rw + m, h }
+            : { x: 0, y: h - rh - m, w, h: rh + m }
+        const T = cs(c.headline, s.cs),
+          fs = fit(T, bw, hh, s, Math.round(mn * 0.2)),
+          bg = P.bg,
+          A = `position:absolute;`,
+          Z = `${A}left:${z.x}px;top:${z.y}px;width:${z.w}px;height:${z.h}px;`
+        let dec = ''
+        if (sk == 'street')
+          dec += `<div style="${Z}background:radial-gradient(circle,${P.b} 22%,transparent 24%) 0 0/28px 28px;-webkit-mask-image:linear-gradient(${land ? 'to left' : 'to top'},#000,transparent)"></div>`
+        if (sk == 'nature' || sk == 'ai')
+          dec += `<div style="${Z}opacity:.55;padding:${Math.round(mn * 0.02)}px">${mand(P.b, 'none', 16, 1.4, 'width:100%;height:100%')}</div>`
+        if (sk == 'pop') {
+          let r = [...S.topic].reduce(
+              (a, x) => (a * 31 + x.charCodeAt(0)) >>> 0,
+              7,
+            ),
+            R = () => (r = (r * 1664525 + 1013904223) >>> 0) / 4294967296,
+            n = 0
+          const cl = [P.a, P.b, '#fff']
+          for (let t = 0; t < 400 && n < 22; t++) {
+            const q = 18 + R() * 40,
+              x = R() * (w - q),
+              y = R() * (h - q),
+              kk = Math.floor(R() * 3)
+            if (x + q > m && x < m + bw && y + q > m && y < m + bh) continue
+            if (x + q > bx && x < bx + d && y + q > by && y < by + d) continue
+            n++
+            dec += `<i style="${A}left:${x | 0}px;top:${y | 0}px;width:${q | 0}px;height:${q | 0}px;background:${cl[n % 3]};${['border-radius:50%', 'border-radius:20%', 'clip-path:polygon(50% 0,100% 100%,0 100%)'][kk]};transform:rotate(${(R() * 360) | 0}deg)"></i>`
+          }
+        }
+        const star =
+          'polygon(' +
+          Array.from({ length: 24 }, (_, i) => {
+            const a = (Math.PI * i) / 12,
+              r = i % 2 ? 38 : 50
+            return `${(50 + r * Math.sin(a)).toFixed(1)}% ${(50 - r * Math.cos(a)).toFixed(1)}%`
+          }).join(',') +
+          ')'
+        dec += `<div style="${A}left:${bx}px;top:${by}px;width:${d}px;height:${d}px;display:flex;align-items:center;justify-content:center;text-align:center;background:${P.a};color:${ink(P.a)};font:700 ${Math.round(d * (sk == 'pop' ? 0.14 : 0.15))}px/1.05 ${s.d};${sk == 'pop' ? `clip-path:${star};transform:rotate(-8deg)` : `border-radius:50%;${sk == 'street' ? `border:8px solid ${P.fg};transform:rotate(8deg);text-transform:uppercase` : ''}`}z-index:3"><span style="width:${sk == 'pop' ? 52 : 66}%">${esc(c.cta)}</span></div>`
+        const kst = {
+            street: `align-self:flex-start;background:${P.a};color:#000;padding:.25em .7em;transform:rotate(-2deg);text-transform:uppercase;letter-spacing:.08em;font-weight:700`,
+            swiss: `border-top:3px solid ${P.fg};padding-top:.6em;font-weight:500`,
+            pop: `align-self:center;background:${P.b};color:#fff;padding:.3em 1em;border-radius:99px;font-weight:700`,
+            nature: `opacity:.75;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:${P.fg}`,
+          }[sk == 'ai' ? 'nature' : sk],
+          shd =
+            sk == 'street' ? `text-shadow:.045em .045em 0 ${P.b};`
+            : sk == 'pop' ? `text-shadow:.05em .05em 0 ${P.b};`
+            : ''
+        const el = document.createElement('div')
+        el.style.cssText = `${A}width:${w}px;height:${h}px;overflow:hidden;background:${bg};color:${P.fg};font-family:Inter,system-ui,sans-serif`
+        el.innerHTML =
+          dec +
+          `<div style="${A}left:${m}px;top:${m}px;width:${bw}px;height:${bh}px;display:flex;flex-direction:column;gap:${g}px;text-align:${s.al == 'c' ? 'center' : 'left'};z-index:2"><div style="flex:none;font-size:${kf}px;${kst}">${esc(c.kicker)}</div><div class="fit" style="flex:none;height:${hh}px;display:flex;align-items:center;${sk == 'swiss' ? 'margin-top:auto;' : ''}${s.al == 'c' ? 'justify-content:center;' : ''}overflow:hidden;font:${
+            sk == 'swiss' || sk == 'nature' || sk == 'ai' ? 800
+            : sk == 'pop' ? 700
+            : 400
+          } ${fs}px/${s.ld} ${s.d};letter-spacing:${s.tr};${shd}"><span>${esc(T)}</span></div><div style="flex:none;height:${sh}px;overflow:hidden;font:${sk == 'street' ? 600 : 400} ${sf}px/1.3 Inter,sans-serif;${sk == 'street' ? `border-left:8px solid ${P.a};padding-left:.6em` : ''}">${esc(c.sub)}</div></div>`
+        return el
+      }
+      function cloudPoster(k) {
+        const { w, h, textPlacement } = SZ[k]
+        const wide = textPlacement == 'left'
+        const margin = Math.round(Math.min(w, h) * (wide ? 0.055 : 0.035))
+        const el = document.createElement('div')
+        el.style.cssText = `position:relative;overflow:hidden;width:${w}px;height:${h}px;background:#14251e;color:#fff;font-family:Inter,system-ui,sans-serif`
+
+        const image = document.createElement('img')
+        image.alt = ''
+        image.src = S.fullPosters[k]
+        image.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;display:block'
+
+        const panel = document.createElement('div')
+        panel.style.cssText = wide ?
+          `position:absolute;inset:0 auto 0 0;box-sizing:border-box;width:48%;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:${Math.round(margin * 0.3)}px;padding:${margin}px;background:linear-gradient(90deg,rgba(9,20,16,.94),rgba(9,20,16,.74) 78%,rgba(9,20,16,0));color:#fff`
+        : `position:absolute;inset:auto 0 0;box-sizing:border-box;height:${k == 'ig_1x1' ? 36 : 32}%;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;gap:${Math.round(margin * 0.24)}px;padding:${margin}px;background:linear-gradient(0deg,rgba(9,20,16,.96),rgba(9,20,16,.78) 68%,rgba(9,20,16,0));color:#fff`
+
+        const kicker = document.createElement('div')
+        kicker.textContent = S.copy.kicker
+        kicker.style.cssText = `font-size:${Math.round(Math.min(w,h)*0.023)}px;font-weight:700;letter-spacing:.12em;line-height:1.15`
+
+        const headline = document.createElement('div')
+        headline.className = 'fit'
+        headline.style.cssText = `width:100%;height:${Math.round(h*(wide?0.28:k=='ig_1x1'?0.19:0.17))}px;overflow:hidden;display:flex;align-items:center;font-size:${Math.round(Math.min(w,h)*0.09)}px;line-height:.98;font-weight:800;letter-spacing:-.035em`
+        const headlineText = document.createElement('span')
+        headlineText.textContent = S.copy.headline
+        headline.append(headlineText)
+
+        const sub = document.createElement('div')
+        sub.textContent = S.copy.sub
+        sub.style.cssText = `max-width:100%;font-size:${Math.round(Math.min(w,h)*0.03)}px;font-weight:500;line-height:1.2`
+
+        const cta = document.createElement('div')
+        cta.textContent = S.copy.cta
+        cta.style.cssText = `margin-top:${Math.round(margin*0.08)}px;border:2px solid rgba(255,255,255,.82);border-radius:999px;padding:.42em .9em;font-size:${Math.round(Math.min(w,h)*0.028)}px;font-weight:700;line-height:1`
+
+        panel.append(kicker, headline, sub, cta)
+        el.append(image, panel)
+        return el
+      }
+      function fitPosterImage(image, platform) {
+        return new Promise((resolve, reject) => {
+          const source = new Image()
+          source.onload = () => {
+            const target = SZ[platform]
+            const canvas = document.createElement('canvas')
+            canvas.width = target.w
+            canvas.height = target.h
+            const context = canvas.getContext('2d')
+            if (!context) {
+              reject(new Error('Could not prepare the platform-sized image.'))
+              return
+            }
+            context.drawImage(source, 0, 0, target.w, target.h)
+            resolve(canvas.toDataURL('image/png'))
+          }
+          source.onerror = () => reject(new Error('Cloudflare returned an unreadable image.'))
+          source.src = `data:${image.mime};base64,${image.b64}`
+        })
+      }
+      function fitAll(n) {
+        const f = () =>
+          n.querySelectorAll('.fit').forEach((e) => {
+            const s = e.firstElementChild
+            let z = parseFloat(getComputedStyle(e).fontSize)
+            while (
+              (s.offsetHeight > e.clientHeight + 1 ||
+                s.offsetWidth > e.clientWidth + 1) &&
+              z > 20
+            ) {
+              z -= 2
+              e.style.fontSize = z + 'px'
+            }
+          })
+        f()
+        document.fonts && document.fonts.ready.then(f)
+      }
+      async function exp(k) {
+        const z = SZ[k],
+          n = $('#p_' + k).firstElementChild
+        if (!window.htmlToImage) {
+          toast('Export needs the internet. Take a screenshot meanwhile.')
+          return
+        }
+        const o = {
+          width: z.w,
+          height: z.h,
+          pixelRatio: 1,
+          style: { transform: 'none' },
+        }
+        let b = null
+        try {
+          b = await htmlToImage.toBlob(n, o)
+        } catch (e) {
+          try {
+            b = await htmlToImage.toBlob(n, { ...o, skipFonts: true })
+          } catch (e2) {
+            b = null
+          }
+        }
+        if (!b) {
+          toast('Could not export. Try again, or take a screenshot.')
+          return
+        }
+        const u = URL.createObjectURL(b),
+          a = document.createElement('a')
+        a.href = u
+        a.download = `shilpam-${k}-${z.w}x${z.h}.png`
+        document.body.append(a)
+        a.click()
+        a.remove()
+        setTimeout(() => URL.revokeObjectURL(u), 4000)
+      }
+      try {
+        const r = JSON.parse(localStorage.getItem('shilpam:v1') || '{}')
+        if (r && Array.isArray(r.pf) && typeof r.step == 'number') {
+          delete r.img
+          delete r.wantImg
+          delete r.fullPosters
+          Object.assign(S, r)
+        }
+      } catch (e) {}
+      S.busy = false
+      if (S.step == 4 && !S.copy) S.step = 3
+      draw()
+    </script>
+  </body>
+</html>

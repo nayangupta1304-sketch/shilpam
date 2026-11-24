@@ -1,0 +1,56 @@
+'use strict';
+// POST /api/image { type, topic, style, platform, visual? } -> { ok, data: { mime, b64 } }
+const { clean, limited, body: readBody } = require('../lib/util');
+const { TYPES, LOOK } = require('../lib/consts');
+const { FORMATS } = require('../lib/platforms');
+const { generateCloudflareImage, buildPosterPrompt } = require('../lib/cloudflare');
+const { containsText } = require('../lib/text-detection');
+const owns = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
+
+module.exports = async (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
+  const send = (c, o) => res.status(c).json(o);
+  if (req.method !== 'POST') return send(405, { ok: false, code: 'method' });
+  if (!process.env.CLOUDFLARE_API_TOKEN) return send(503, { ok: false, code: 'no_key' });
+  if (!process.env.CLOUDFLARE_ACCOUNT_ID) return send(503, { ok: false, code: 'no_account_id' });
+  if (limited(req, 'image', 6)) return send(429, { ok: false, code: 'rate_limited' });
+  const b = readBody(req);
+  const format = b && typeof b.platform === 'string' && owns(FORMATS, b.platform)
+    ? FORMATS[b.platform]
+    : null;
+  const topic = clean(b && b.topic, 300);
+  const style = b && b.style;
+  if (!b || typeof b.type !== 'string' || !owns(TYPES, b.type) || topic.length < 3 ||
+      !format || typeof style !== 'string' || !owns(LOOK, style)) {
+    return send(400, { ok: false, code: 'bad_request' });
+  }
+
+  const prompt = buildPosterPrompt({
+    format,
+    type: b.type,
+    topic,
+    extra: clean(b.extra, 150),
+    style,
+    visual: clean(b.visual, 100)
+  });
+  try {
+    const image = await generateCloudflareImage(prompt, format);
+    let textDetected;
+    try {
+      textDetected = await containsText(Buffer.from(image.b64, 'base64'));
+    } catch (e) {
+      const error = new Error('text_check_failed');
+      error.code = 'text_check_failed';
+      error.detail = `Could not verify the generated artwork for stray text${e && e.message ? `: ${e.message}` : ''}.`;
+      throw error;
+    }
+    if (textDetected) {
+      const error = new Error('text_detected');
+      error.code = 'text_detected';
+      error.detail = 'Cloudflare artwork contained detected lettering; using the default Shilpam layout.';
+      throw error;
+    }
+    return send(200, { ok: true, data: image });
+  }
+  catch (e) { return send(502, { ok: false, code: e.code || 'failed', detail: e.detail }); }
+};

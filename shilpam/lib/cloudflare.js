@@ -4,12 +4,13 @@ const { LOOK } = require('./consts');
 
 const MODEL = '@cf/black-forest-labs/flux-2-klein-4b';
 
-function buildPosterPrompt({ format, topic, extra, style, visual }) {
+function buildPosterPrompt({ format, topic, extra, style, visual, hasReferenceImage }) {
   return [
     `Generate one full-bleed image for a ${format.ratio} canvas at ${format.generationWidth}x${format.generationHeight}px; the final canvas is ${format.width}x${format.height}px.`,
     'Return only a cohesive photograph or illustration, not a designed graphic, advertisement, cover, page, collage, mockup, or user interface.',
     `Scene to depict (meaning only; never reproduce these words visibly): ${JSON.stringify(topic)}.`,
     extra && `Additional visual details only; never spell or display these terms: ${JSON.stringify(extra)}.`,
+    hasReferenceImage && 'Use the uploaded image as the visual reference and preserve its recognizable main subject. Recompose it for this platform without adding any text.',
     `Framing: ${format.composition}. ${format.platformGuidance} Keep the ${format.textPlacement} area visually calm and low-detail.`,
     `Art direction: ${LOOK[style] || LOOK.nature}.`,
     visual && `Optional visual guidance for subject, framing, style, and palette only: ${JSON.stringify(visual)}.`,
@@ -18,7 +19,7 @@ function buildPosterPrompt({ format, topic, extra, style, visual }) {
   ].filter(Boolean).join('\n');
 }
 
-async function generateCloudflareImage(prompt, format) {
+async function generateCloudflareImage(prompt, format, referenceImage) {
   const token = process.env.CLOUDFLARE_API_TOKEN;
   const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
   if (!token) {
@@ -37,6 +38,13 @@ async function generateCloudflareImage(prompt, format) {
   body.set('prompt', prompt);
   body.set('width', String(format.generationWidth));
   body.set('height', String(format.generationHeight));
+  if (referenceImage) {
+    body.set(
+      'input_image_0',
+      new Blob([referenceImage.bytes], { type: referenceImage.mime }),
+      'reference.jpg'
+    );
+  }
   const response = await timedFetch(url, {
     method: 'POST',
     headers: {

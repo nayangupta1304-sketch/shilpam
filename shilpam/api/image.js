@@ -1,11 +1,26 @@
 'use strict';
-// POST /api/image { type, topic, style, platform, visual? } -> { ok, data: { mime, b64 } }
+// POST /api/image { type, topic, style, platform, visual?, referenceImage? } -> { ok, data: { mime, b64 } }
 const { clean, limited, body: readBody } = require('../lib/util');
 const { TYPES, LOOK } = require('../lib/consts');
 const { FORMATS } = require('../lib/platforms');
 const { generateCloudflareImage, buildPosterPrompt } = require('../lib/cloudflare');
 const { containsText } = require('../lib/text-detection');
 const owns = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
+const MAX_REFERENCE_BYTES = 512 * 1024;
+
+function readReferenceImage(value) {
+  if (value == null) return null;
+  if (!value || value.mime !== 'image/jpeg' || typeof value.b64 !== 'string' ||
+      value.b64.length > Math.ceil(MAX_REFERENCE_BYTES / 3) * 4) {
+    return false;
+  }
+  const bytes = Buffer.from(value.b64, 'base64');
+  const isJpeg = bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+  if (!isJpeg || bytes.length > MAX_REFERENCE_BYTES || bytes.toString('base64') !== value.b64) {
+    return false;
+  }
+  return { mime: value.mime, bytes };
+}
 
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
@@ -20,8 +35,9 @@ module.exports = async (req, res) => {
     : null;
   const topic = clean(b && b.topic, 300);
   const style = b && b.style;
+  const referenceImage = readReferenceImage(b && b.referenceImage);
   if (!b || typeof b.type !== 'string' || !owns(TYPES, b.type) || topic.length < 3 ||
-      !format || typeof style !== 'string' || !owns(LOOK, style)) {
+      !format || typeof style !== 'string' || !owns(LOOK, style) || referenceImage === false) {
     return send(400, { ok: false, code: 'bad_request' });
   }
 
@@ -31,10 +47,11 @@ module.exports = async (req, res) => {
     topic,
     extra: clean(b.extra, 150),
     style,
-    visual: clean(b.visual, 100)
+    visual: clean(b.visual, 100),
+    hasReferenceImage: !!referenceImage
   });
   try {
-    const image = await generateCloudflareImage(prompt, format);
+    const image = await generateCloudflareImage(prompt, format, referenceImage);
     let textDetected;
     try {
       textDetected = await containsText(Buffer.from(image.b64, 'base64'));

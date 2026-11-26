@@ -5,9 +5,10 @@ const express = require('express');
 const app = express();
 app.disable('x-powered-by');
 const json = express.json({ limit: '8kb' });
+const imageJson = express.json({ limit: '1mb' });
 app.post('/api/ai', json, require('./api/ai'));
 app.post('/api/improve', json, require('./api/improve'));
-app.post('/api/image', json, require('./api/image'));
+app.post('/api/image', imageJson, require('./api/image'));
 app.get('/api/health', (req, res) => res.json({
   ok: true,
   text: !!process.env.GROQ_API_KEY,

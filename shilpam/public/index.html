@@ -18,8 +18,6 @@
         --forest: #22372b;
         --rose: #e58f83;
         --ink: #22372b;
-        --bw: 36px;
-        --tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='36' viewBox='0 0 56 36'%3E%3Crect width='56' height='36' fill='%23F6F1E7'/%3E%3Cpath d='M0 3h56M0 33h56' stroke='%233F5A47' stroke-width='1.5'/%3E%3Cpath d='M28 6l10 12-10 12-10-12z' fill='%233F5A47'/%3E%3Cpath d='M28 11l5.5 7-5.5 7-5.5-7z' fill='%23F6F1E7'/%3E%3Ccircle cx='28' cy='18' r='2.6' fill='%23E58F83'/%3E%3Cpath d='M2 18q6-8 12 0q-6 8-12 0M42 18q6-8 12 0q-6 8-12 0' fill='%238A9A7B'/%3E%3C/svg%3E");
       }
       * {
         box-sizing: border-box;
@@ -32,109 +30,31 @@
         min-height: 100vh;
         color: var(--ink);
         font-family: Inter, system-ui, sans-serif;
-        padding: 78px clamp(52px, 6vw, 90px) 120px;
+        padding: clamp(20px, 4vw, 48px) clamp(18px, 5vw, 72px) 88px;
         background:
           radial-gradient(ellipse at 12% 0%, #e3e8d6 0, transparent 48%),
           radial-gradient(ellipse at 95% 18%, #f6dad2 0, transparent 32%),
           radial-gradient(ellipse at 70% 100%, #dce6d8 0, transparent 45%),
           var(--cream);
       }
-      #frame {
-        position: fixed;
-        inset: 0;
-        overflow: hidden;
-        pointer-events: none;
-        z-index: 40;
-      }
-      #frame::after {
-        content: '';
-        position: absolute;
-        inset: var(--bw);
-        border: 1px solid #8a9a7b88;
-      }
-      #frame i {
-        position: absolute;
-        display: block;
-        height: var(--bw);
-        background-color: var(--cream);
-        background-image: var(--tile);
-        background-repeat: repeat-x;
-        background-size: auto 100%;
-        background-position: center;
-      }
-      #frame .bt {
-        top: 0;
-        left: 0;
-        right: 0;
-      }
-      #frame .bb {
-        bottom: 0;
-        left: 0;
-        right: 0;
-      }
-      #frame .bl {
-        top: 0;
-        left: 0;
-        width: 100vh;
-        transform-origin: 0 0;
-        transform: translateY(100vh) rotate(-90deg);
-        width: 100dvh;
-        transform: translateY(100dvh) rotate(-90deg);
-      }
-      #frame .br {
-        top: 0;
-        right: 0;
-        width: 100vh;
-        transform-origin: 100% 0;
-        transform: translateY(100vh) rotate(90deg);
-        width: 100dvh;
-        transform: translateY(100dvh) rotate(90deg);
-      }
-      #frame b {
-        position: absolute;
-        width: var(--bw);
-        height: var(--bw);
-        background: var(--cream);
-        display: grid;
-        place-items: center;
-        z-index: 2;
-      }
-      #frame b svg,
-      #frame b img {
-        width: 86%;
-        height: 86%;
-        display: block;
-        border-radius: 50%;
-      }
-      #frame .c1 {
-        top: 0;
-        left: 0;
-      }
-      #frame .c2 {
-        top: 0;
-        right: 0;
-      }
-      #frame .c3 {
-        bottom: 0;
-        left: 0;
-      }
-      #frame .c4 {
-        bottom: 0;
-        right: 0;
-      }
       header {
-        text-align: center;
-        margin-bottom: 34px;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
       }
       .wm {
         font:
-          900 clamp(64px, 13vw, 128px)/1 Fraunces,
+          900 clamp(42px, 5vw, 58px)/1 Fraunces,
           Georgia,
           serif;
         letter-spacing: -0.02em;
         display: inline-block;
         position: relative;
-        padding-bottom: 0.5em;
+        padding-bottom: 0.4em;
+        white-space: nowrap;
       }
       .wm > span {
         font-weight: 900;
@@ -148,9 +68,9 @@
       .wm .dot {
         position: absolute;
         left: 50%;
-        top: -0.05em;
-        width: 0.38em;
-        height: 0.38em;
+        top: 0.06em;
+        width: 0.3em;
+        height: 0.3em;
         transform: translateX(-50%);
         display: block;
       }
@@ -191,40 +111,602 @@
       }
       .tag {
         font:
-          500 clamp(18px, 2.4vw, 26px)/1.3 Fraunces,
-          Georgia,
-          serif;
+          600 12px/1.3 Inter,
+          sans-serif;
         color: var(--moss);
-        margin: 8px 0 0;
+        margin: 0;
+        letter-spacing: 0.04em;
+      }
+      .site-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        flex: 0 0 auto;
+        padding: 12px 18px;
+        border: 1px solid #22372b30;
+        border-radius: 999px;
+        color: var(--forest);
+        text-decoration: none;
+        font: 700 13px Inter, sans-serif;
+        transition:
+          background 0.18s ease,
+          color 0.18s ease,
+          transform 0.18s ease;
+      }
+      .site-cta:hover {
+        background: var(--forest);
+        color: #fff;
+        transform: translateY(-2px);
+      }
+      .hero {
+        max-width: 1400px;
+        margin: clamp(32px, 5vw, 64px) auto 56px;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 30px;
+      }
+      .hero-copy {
+        width: 100%;
+        max-width: none;
+        text-align: center;
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        margin: 0 0 18px;
+        color: var(--moss);
+        font: 700 11px Inter, sans-serif;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+      }
+      .eyebrow::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--rose);
+        box-shadow: 0 0 0 4px #e58f832b;
+      }
+      .hero h1 {
+        margin: 0;
+        max-width: none;
+        color: var(--forest);
+        font: 500 clamp(44px, 7.5vw, 104px)/0.98 Fraunces, Georgia, serif;
+        letter-spacing: -0.045em;
+      }
+      .hero h1 em {
+        color: #b85e50;
+        font-weight: 500;
+      }
+      .hero-description {
+        max-width: 70ch;
+        margin: 20px auto 26px;
+        color: #5b6b57;
+        font: 400 clamp(15px, 1.4vw, 18px)/1.65 Inter, sans-serif;
+      }
+      .hero-actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .hero-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 20px;
+        padding: 15px 20px;
+        border-radius: 999px;
+        background: var(--forest);
+        color: #fff;
+        font: 700 14px Inter, sans-serif;
+        text-decoration: none;
+        box-shadow: 0 10px 24px -14px #22372b99;
+        transition:
+          transform 0.18s ease,
+          background 0.18s ease,
+          box-shadow 0.18s ease;
+      }
+      .hero-primary:hover {
+        transform: translateY(-2px);
+        background: var(--moss);
+        box-shadow: 0 14px 28px -14px #22372bb3;
+      }
+      .hero-primary span {
+        font-size: 19px;
+        line-height: 0.8;
+      }
+      .hero-note {
+        color: #66745f;
+        font: 500 12px/1.5 Inter, sans-serif;
+      }
+      .poster-cloud {
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        padding: 20px 10px 28px;
+        scrollbar-width: none;
+        -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+        mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent);
+      }
+      .poster-cloud::-webkit-scrollbar {
+        display: none;
+      }
+      .poster-track {
+        display: flex;
+        width: max-content;
+        animation: poster-marquee 120s linear infinite;
+        animation-delay: 2s;
+        will-change: transform;
+      }
+      .poster-set {
+        display: flex;
+        flex: 0 0 auto;
+        align-items: center;
+        gap: 12px;
+        padding-right: 12px;
+      }
+      .poster-cloud:hover .poster-track,
+      .poster-cloud:focus-within .poster-track,
+      .poster-cloud:active .poster-track {
+        animation-play-state: paused;
+      }
+      @keyframes poster-marquee {
+        to { transform: translateX(var(--poster-travel, -50%)); }
+      }
+      .poster-showcase {
+        width: 100%;
+        min-width: 0;
+        max-width: 1400px;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
+      }
+      .sample-item {
+        position: relative;
+        flex: 0 0 var(--sample-width);
+        min-width: 0;
+        transition: z-index 0s;
+      }
+      .sample-item.is-selected {
+        z-index: 4;
+      }
+      .sample-item.is-selected .sample-poster {
+        transform: translateY(-12px) scale(1.06);
+        box-shadow: 0 28px 48px -20px #22372bb3;
+      }
+      .sample-select {
+        position: absolute;
+        z-index: 2;
+        inset: -5px;
+        width: calc(100% + 10px);
+        height: calc(100% + 10px);
+        padding: 0;
+        border: 0;
+        border-radius: 18px;
+        background: transparent;
+        cursor: pointer;
+      }
+      .sample-select:focus-visible {
+        outline: 3px solid var(--rose);
+        outline-offset: 3px;
+      }
+      .sample-poster {
+        position: relative;
+        isolation: isolate;
+        display: flex;
+        width: 100%;
+        aspect-ratio: var(--sample-ratio);
+        flex-direction: column;
+        justify-content: space-between;
+        overflow: hidden;
+        padding: clamp(9px, 1.2vw, 14px);
+        border: 0;
+        border-radius: 14px;
+        box-shadow: 0 22px 40px -24px #22372b80;
+        transition: transform 0.28s ease, box-shadow 0.28s ease;
+      }
+      .poster-track.is-paused {
+        animation-play-state: paused;
+      }
+      .sample-poster::before,
+      .sample-poster::after,
+      .poster-art {
+        position: absolute;
+        z-index: 0;
+        pointer-events: none;
+      }
+      .sample-poster::before,
+      .sample-poster::after {
+        content: '';
+      }
+      .sample-kind,
+      .sample-copy {
+        position: relative;
+        z-index: 1;
+      }
+      .sample-kind {
+        font: 700 8px/1.2 Inter, sans-serif;
+        letter-spacing: 0.11em;
+        text-transform: uppercase;
+      }
+      .sample-copy strong {
+        display: block;
+        font: 800 clamp(14px, 1.55vw, 20px)/0.98 Fraunces, Georgia, serif;
+        letter-spacing: -0.035em;
+      }
+      .sample-copy small {
+        display: block;
+        margin-top: 6px;
+        font: 600 8px/1.35 Inter, sans-serif;
+      }
+      .sample-dim {
+        margin: 10px 2px 0;
+        color: #5b6b57;
+        font: 500 10px/1.35 Inter, sans-serif;
+        text-align: center;
+      }
+      .sample-style {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--forest);
+        font: 800 10px/1.2 Inter, sans-serif;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .sample-dim strong {
+        display: block;
+        color: #5b6b57;
+        font: 600 9px/1.35 Inter, sans-serif;
+      }
+      .sample-nature {
+        background: #23392d;
+        color: #f9f0de;
+      }
+      .sample-nature .poster-art {
+        top: 20%;
+        right: 12%;
+        width: 58%;
+        aspect-ratio: 1;
+        border: 1px solid #e58f83;
+        border-radius: 50%;
+        box-shadow: 0 0 0 10px #e58f831c, 0 0 0 22px #e58f8310;
+      }
+      .sample-nature::after {
+        top: 34%;
+        right: 28%;
+        width: 25%;
+        height: 25%;
+        border-radius: 50%;
+        background: var(--rose);
+        filter: blur(1px);
+      }
+      .sample-swiss {
+        background: #f1f0ec;
+        color: #161616;
+      }
+      .sample-swiss .poster-art {
+        top: 21%;
+        right: 12%;
+        width: 58%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #ee8b7e;
+      }
+      .sample-swiss::after {
+        top: 18%;
+        left: 13%;
+        width: 74%;
+        height: 30%;
+        border: 1px solid #1616163b;
+        border-right: 0;
+        border-left: 0;
+      }
+      .sample-street {
+        background: #1c1c1c;
+        color: #f4f1e8;
+      }
+      .sample-street .poster-art {
+        top: 17%;
+        right: -15%;
+        width: 70%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: repeating-conic-gradient(#ffe600 0deg 10deg, transparent 10deg 30deg);
+        opacity: 0.7;
+      }
+      .sample-street::after {
+        top: 30%;
+        left: 12%;
+        width: 80%;
+        height: 3px;
+        background: #ff3b2f;
+        transform: rotate(-24deg);
+      }
+      .sample-pop {
+        background: linear-gradient(145deg, #ff7aa2, #ffb347);
+        color: #fff;
+      }
+      .sample-pop .poster-art {
+        top: 19%;
+        right: 15%;
+        width: 56%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: radial-gradient(circle, #fff3a3 0 13%, #5b2bff 14% 20%, transparent 21%),
+          repeating-conic-gradient(#fff3a3 0 8deg, transparent 8deg 24deg);
+      }
+      .sample-ai {
+        background: linear-gradient(140deg, #d9f0e2, #c7d7ff 60%, #ffcab8);
+        color: #22372b;
+      }
+      .sample-ai .poster-art {
+        top: 16%;
+        right: 12%;
+        width: 62%;
+        aspect-ratio: 1;
+        border-radius: 42% 58% 64% 36%;
+        background: conic-gradient(from 25deg, #ef8f80, #e5c365, #829bbc, #be8bd2, #ef8f80);
+        filter: drop-shadow(9px 10px 12px #22372b35);
+        transform: rotate(-18deg);
+      }
+      .sample-ai::after {
+        top: 28%;
+        right: 29%;
+        width: 18%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #f8f2d9;
+      }
+      .sample-editorial {
+        background: linear-gradient(145deg, #f6ecd7 0 48%, #20558c 48%);
+        color: #fff7e6;
+      }
+      .sample-editorial .sample-kind {
+        color: #183e68;
+      }
+      .sample-editorial .sample-copy {
+        align-self: flex-end;
+        width: 76%;
+        text-align: right;
+      }
+      .sample-editorial .sample-copy strong {
+        font-family: Inter, sans-serif;
+        font-weight: 900;
+        letter-spacing: -0.07em;
+        text-transform: uppercase;
+      }
+      .sample-editorial .poster-art {
+        top: 17%;
+        left: 12%;
+        width: 48%;
+        height: 38%;
+        background: repeating-linear-gradient(90deg, #e36a4c 0 12px, transparent 12px 20px),
+          linear-gradient(0deg, transparent 0 72%, #20558c 72%);
+        clip-path: polygon(0 100%, 18% 0, 37% 100%, 56% 0, 75% 100%, 100% 0, 100% 100%);
+      }
+      .sample-editorial::after {
+        right: 13%;
+        bottom: 19%;
+        width: 7px;
+        height: 38%;
+        background: #f4bf57;
+      }
+      .sample-botanical {
+        background: #f0dfc0;
+        color: #294638;
+      }
+      .sample-botanical .sample-kind {
+        align-self: center;
+        color: #9c4c35;
+      }
+      .sample-botanical .sample-copy {
+        align-self: center;
+        width: 85%;
+        text-align: center;
+      }
+      .sample-botanical .sample-copy strong {
+        font-size: clamp(14px, 1.7vw, 22px);
+        font-weight: 700;
+        letter-spacing: -0.06em;
+      }
+      .sample-botanical .poster-art {
+        top: 17%;
+        right: 20%;
+        width: 60%;
+        aspect-ratio: 1;
+        border: 1px solid #29463855;
+        border-radius: 50%;
+        background: conic-gradient(from 18deg, #d85d42 0 11%, #f1bd61 11% 22%, #6f9567 22% 33%, #f0dfc0 33% 44%, #d85d42 44% 55%, #f1bd61 55% 66%, #6f9567 66% 77%, #f0dfc0 77% 88%, #d85d42 88%);
+        box-shadow: 0 0 0 8px #f0dfc088;
+      }
+      .sample-botanical::after {
+        top: 27%;
+        left: 44%;
+        width: 12%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background: #f0dfc0;
+      }
+      .sample-retro {
+        background: #392049;
+        color: #fff0c2;
+      }
+      .sample-retro .sample-kind {
+        color: #ffe36b;
+      }
+      .sample-retro .sample-copy strong {
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+      .sample-retro .poster-art {
+        top: 12%;
+        right: 8%;
+        width: 65%;
+        height: 66%;
+        border-radius: 14px;
+        background: repeating-linear-gradient(135deg, #ff6f59 0 10px, #ffe36b 10px 20px, #91dfbd 20px 30px);
+        clip-path: polygon(50% 0, 62% 18%, 88% 10%, 82% 36%, 100% 50%, 80% 62%, 91% 88%, 65% 80%, 50% 100%, 38% 80%, 10% 91%, 19% 64%, 0 50%, 20% 37%, 10% 12%, 38% 20%);
+        transform: rotate(12deg);
+      }
+      .sample-retro::after {
+        top: 27%;
+        right: 31%;
+        width: 16%;
+        aspect-ratio: 1;
+        border: 5px solid #392049;
+        border-radius: 50%;
+        background: #fff0c2;
+      }
+      .sample-cloudflare-festival {
+        background-image: linear-gradient(0deg, #17201fe8 0%, #17201f52 48%, transparent 82%),
+          url('assets/cloudflare-festival.jpg');
+        background-position: center;
+        background-size: cover;
+        color: #fff5dc;
+      }
+      .sample-cloudflare-minimal {
+        background-image: linear-gradient(0deg, #17201fd9 0%, #17201f52 45%, transparent 82%),
+          url('assets/cloudflare-minimal.jpg');
+        background-position: center;
+        background-size: cover;
+        color: #fff5dc;
+      }
+      .sample-uploaded {
+        background-image: linear-gradient(90deg, #102018ed 0%, #102018a8 52%, #10201816 100%),
+          url('assets/cloudflare-minimal.jpg');
+        background-position: center;
+        background-size: cover;
+        color: #fff;
+      }
+      .photo-upload {
+        margin-top: 20px;
+        padding: 16px;
+        border: 1px dashed #aeb8a1;
+        border-radius: 18px;
+        background: #f7f6f0;
+      }
+      .photo-upload-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+      }
+      .photo-upload-title {
+        color: var(--forest);
+        font: 700 14px/1.3 Inter, sans-serif;
+      }
+      .photo-upload-help,
+      .photo-upload-note {
+        margin: 4px 0 0;
+        color: #687365;
+        font: 400 12px/1.5 Inter, sans-serif;
+      }
+      .photo-file-input {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        clip-path: inset(50%);
+      }
+      .photo-choose,
+      .photo-remove {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 38px;
+        padding: 9px 13px;
+        border: 1px solid #c9cfbf;
+        border-radius: 999px;
+        background: #fffdf8;
+        color: var(--forest);
+        font: 700 12px/1 Inter, sans-serif;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .photo-choose:focus-visible,
+      .photo-remove:focus-visible {
+        outline: 3px solid var(--rose);
+        outline-offset: 3px;
+      }
+      .photo-upload:focus-within .photo-choose {
+        outline: 3px solid var(--rose);
+        outline-offset: 3px;
+      }
+      .photo-preview {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 12px;
+        padding: 9px;
+        border-radius: 12px;
+        background: #fffdf8;
+        color: var(--forest);
+        font: 600 12px/1.4 Inter, sans-serif;
+      }
+      .photo-preview img {
+        width: 58px;
+        height: 58px;
+        flex: 0 0 auto;
+        border-radius: 9px;
+        object-fit: cover;
+      }
+      .photo-preview span {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .photo-remove {
+        margin-left: auto;
+        color: #8d4038;
+      }
+      .photo-upload-note {
+        margin-top: 10px;
+        font-size: 11px;
       }
       .card {
+        scroll-margin-top: 24px;
         max-width: 1080px;
         margin: 0 auto;
-        background: #fffcf6cc;
+        background: #fffcf6e8;
         border: 1px solid #d9d2bd;
-        border-radius: 26px;
+        border-radius: 28px;
         padding: clamp(22px, 4vw, 44px);
-        box-shadow: 0 30px 60px -34px #22372b66;
+        box-shadow: 0 26px 70px -38px #22372b80;
+        backdrop-filter: blur(8px);
       }
       .steps {
         display: flex;
-        gap: 8px;
-        margin-bottom: 24px;
-        flex-wrap: wrap;
+        gap: 7px;
+        margin-bottom: 28px;
+        overflow-x: auto;
+        padding: 2px 2px 8px;
+        scrollbar-width: thin;
       }
       .steps i {
-        font: 600 12px Inter;
-        letter-spacing: 0.1em;
+        flex: 0 0 auto;
+        font: 700 10px Inter;
+        letter-spacing: 0.07em;
         text-transform: uppercase;
-        padding: 6px 12px;
+        padding: 8px 11px;
         border-radius: 99px;
         background: var(--sand);
         color: #6b7a64;
         font-style: normal;
+        white-space: nowrap;
       }
       .steps i.on {
         background: var(--forest);
         color: #fff;
+        box-shadow: 0 4px 12px #22372b30;
       }
       .steps i.done {
         background: #cfdac4;
@@ -249,22 +731,41 @@
       }
       .opt {
         all: unset;
+        position: relative;
         box-sizing: border-box;
         cursor: pointer;
         background: #fff;
         border: 1.5px solid #ddd5bf;
         border-radius: 18px;
-        padding: 18px;
+        padding: 20px;
+        min-height: 132px;
         display: block;
-        transition: 0.15s;
+        transition:
+          transform 0.18s ease,
+          border-color 0.18s ease,
+          box-shadow 0.18s ease,
+          background 0.18s ease;
       }
       .opt:hover {
         border-color: var(--sage);
-        transform: translateY(-2px);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 24px -18px #22372b88;
       }
       .opt.on {
         border-color: var(--forest);
         box-shadow: 0 0 0 3px #8a9a7b55;
+        background: #f7f9f2;
+      }
+      .opt.on::after {
+        content: '';
+        position: absolute;
+        top: 16px;
+        right: 20px;
+        width: 8px;
+        height: 13px;
+        border-right: 2px solid var(--forest);
+        border-bottom: 2px solid var(--forest);
+        transform: rotate(45deg);
       }
       .opt b {
         display: block;
@@ -277,6 +778,7 @@
       .opt small {
         color: #66745f;
         font-size: 13px;
+        line-height: 1.5;
       }
       textarea,
       input[type='text'] {
@@ -314,8 +816,15 @@
         background: var(--moss);
       }
       .btn[disabled] {
-        opacity: 0.35;
+        opacity: 0.48;
         cursor: not-allowed;
+      }
+      .btn:focus-visible,
+      .opt:focus-visible,
+      .chip:focus-visible,
+      .mini:focus-visible {
+        outline: 3px solid var(--rose);
+        outline-offset: 4px;
       }
       .btn.g {
         background: transparent;
@@ -330,7 +839,9 @@
       .nav {
         display: flex;
         justify-content: space-between;
-        margin-top: 28px;
+        margin-top: 32px;
+        padding-top: 22px;
+        border-top: 1px solid #d9d2bd;
         gap: 12px;
         flex-wrap: wrap;
       }
@@ -377,6 +888,25 @@
         border-radius: 4px;
         margin-bottom: 10px;
         background: #e4ebd9;
+      }
+      .selection-note {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin: 18px 0 0;
+        padding: 8px 12px;
+        border: 1px solid #d9d2bd;
+        border-radius: 999px;
+        background: #fff9;
+        color: #5b6b57;
+        font: 600 12px Inter, sans-serif;
+      }
+      .selection-note::before {
+        content: '';
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--sage);
       }
       .out {
         display: flex;
@@ -556,6 +1086,93 @@
         position: relative;
       }
       @media (max-width: 600px) {
+        body {
+          padding: 28px 14px 58px;
+        }
+        header {
+          gap: 8px;
+        }
+        .wm {
+          font-size: clamp(30px, 8vw, 40px);
+        }
+        .tag {
+          font-size: 9px;
+        }
+        .site-cta {
+          gap: 5px;
+          padding: 9px 10px;
+          font-size: 10px;
+          white-space: nowrap;
+        }
+        .hero {
+          grid-template-columns: 1fr;
+          gap: 28px;
+          margin: 34px auto 40px;
+        }
+        .hero h1 {
+          font-size: clamp(42px, 12vw, 60px);
+        }
+        .hero-description {
+          margin: 16px 0 20px;
+        }
+        .hero-note {
+          font-size: 11px;
+        }
+        .poster-cloud {
+          width: 100%;
+          max-width: 520px;
+          margin: 0 auto;
+        }
+        .poster-set {
+          gap: 9px;
+          padding-right: 9px;
+        }
+        .sample-poster {
+          padding: 9px;
+          border-radius: 11px;
+        }
+        .sample-copy strong {
+          font-size: clamp(13px, 4vw, 20px);
+        }
+        .card {
+          border-radius: 22px;
+          padding: 20px 16px;
+        }
+        .steps {
+          margin-bottom: 22px;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+          gap: 10px;
+        }
+        .opt {
+          min-height: 0;
+          padding: 16px;
+        }
+        .nav {
+          margin-top: 24px;
+          padding-top: 18px;
+        }
+        .nav > .btn,
+        .nav > span {
+          flex: 1 1 auto;
+        }
+        .nav > .btn {
+          text-align: center;
+        }
+        .nav > span {
+          display: flex;
+          justify-content: flex-end;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+        .nav > span .btn {
+          padding: 11px 15px;
+        }
+        figcaption {
+          align-items: flex-start;
+          flex-direction: column;
+        }
         .preview-bar {
           align-items: flex-start;
           flex-direction: column;
@@ -566,6 +1183,28 @@
         }
         .preview-viewport {
           margin-top: 10px;
+        }
+      }
+      @media (min-width: 601px) and (max-width: 850px) {
+        .hero {
+          max-width: 100%;
+        }
+        .poster-set {
+          gap: 16px;
+          padding-right: 16px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+        .poster-track {
+          animation: none;
         }
       }
       .sp {
@@ -587,14 +1226,156 @@
     </style>
   </head>
   <body>
-    <div id="frame" aria-hidden="true">
-      <i class="bt"></i><i class="bb"></i><i class="bl"></i><i class="br"></i
-      ><b class="c1"></b><b class="c2"></b><b class="c3"></b><b class="c4"></b>
-    </div>
     <header>
-      <div class="wm" id="wm" aria-label="Shilpam"></div>
-      <p class="tag">Tell us the idea. Shilpam crafts the poster.</p>
+      <div>
+        <div class="wm" id="wm" aria-label="Shilpam"></div>
+        <p class="tag">You think, we craft!</p>
+      </div>
+      <a class="site-cta" href="#app">Open the studio <span aria-hidden="true">↘</span></a>
     </header>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">A poster studio for your ideas</p>
+        <h1 id="hero-title">Make your idea <em>come to life.</em></h1>
+        <p class="hero-description">
+          Turn a thought into a poster worth sharing. Choose your post type,
+          design, and format, and let Shilpam bring your words and visuals together.
+        </p>
+        <div class="hero-actions">
+          <a class="hero-primary" href="#app">Create your poster <span aria-hidden="true">↗</span></a>
+          <span class="hero-note">Six post types · five design directions · four export sizes</span>
+        </div>
+      </div>
+      <div class="poster-showcase">
+        <div class="poster-cloud" role="region" aria-label="Sample poster styles and export sizes" tabindex="0">
+          <div class="poster-track">
+            <div class="poster-set" role="list">
+          <article class="sample-item" role="listitem" style="--sample-width: 200px; --sample-ratio: 4 / 5" aria-label="Shilpam Calm event poster, Instagram portrait, 1080 by 1350">
+            <div class="sample-poster sample-nature" aria-hidden="true">
+              <span class="sample-kind">Shilpam calm</span>
+              <span class="poster-art"></span>
+              <div class="sample-copy">
+                <strong>Rooftop<br />sessions</strong>
+                <small>Jazz under the stars</small>
+              </div>
+            </div>
+            <p class="sample-dim"><span class="sample-style">Shilpam Calm · Event</span><strong>Instagram portrait · 1080 × 1350 · 4:5</strong></p>
+          </article>
+          <article class="sample-item" role="listitem" style="--sample-width: 200px; --sample-ratio: 1 / 1" aria-label="Minimal Swiss sale poster, Instagram square, 1080 by 1080">
+            <div class="sample-poster sample-swiss" aria-hidden="true">
+              <span class="sample-kind">Minimal swiss</span>
+              <span class="poster-art"></span>
+              <div class="sample-copy">
+                <strong>Less stuff.<br />More sun.</strong>
+                <small>Summer edit · 20% off</small>
+              </div>
+            </div>
+            <p class="sample-dim"><span class="sample-style">Minimal Swiss · Sale</span><strong>Instagram square · 1080 × 1080 · 1:1</strong></p>
+          </article>
+          <article class="sample-item" role="listitem" style="--sample-width: 300px; --sample-ratio: 16 / 9" aria-label="Bold Street product launch poster, YouTube thumbnail, 1920 by 1080">
+            <div class="sample-poster sample-street" aria-hidden="true">
+              <span class="sample-kind">Bold street</span>
+              <span class="poster-art"></span>
+              <div class="sample-copy">
+                <strong>Make your<br />next move</strong>
+                <small>Fresh drop · 09.30</small>
+              </div>
+            </div>
+            <p class="sample-dim"><span class="sample-style">Bold Street · Product launch</span><strong>YouTube thumbnail · 1920 × 1080 · 16:9</strong></p>
+          </article>
+          <article class="sample-item" role="listitem" style="--sample-width: 325px; --sample-ratio: 1.91 / 1" aria-label="Festive Pop festival poster, LinkedIn landscape, 1200 by 628">
+            <div class="sample-poster sample-pop" aria-hidden="true">
+              <span class="sample-kind">Festive pop</span>
+              <span class="poster-art"></span>
+              <div class="sample-copy">
+                <strong>Light it<br />all up</strong>
+                <small>Diwali night · Nov 01</small>
+              </div>
+            </div>
+            <p class="sample-dim"><span class="sample-style">Festive Pop · Festival</span><strong>LinkedIn landscape · 1200 × 628 · 1.91:1</strong></p>
+          </article>
+          <article class="sample-item" role="listitem" style="--sample-width: 200px; --sample-ratio: 4 / 5" aria-label="AI Art Director quote poster, Instagram portrait, 1080 by 1350">
+            <div class="sample-poster sample-ai" aria-hidden="true">
+              <span class="sample-kind">AI art director</span>
+              <span class="poster-art"></span>
+              <div class="sample-copy">
+                <strong>Ideas become<br />things</strong>
+                <small>Keep looking closer</small>
+              </div>
+            </div>
+            <p class="sample-dim"><span class="sample-style">AI Art Director · Quote</span><strong>Instagram portrait · 1080 × 1350 · 4:5</strong></p>
+          </article>
+          <article class="sample-item" role="listitem" style="--sample-width: 200px; --sample-ratio: 1 / 1" aria-label="Neo Editorial announcement poster, Instagram square, 1080 by 1080">
+            <div class="sample-poster sample-editorial" aria-hidden="true">
+              <span class="sample-kind">Neo editorial</span>
+              <span class="poster-art"></span>
+              <div class="sample-copy">
+                <strong>Big news<br />from us</strong>
+                <small>Studio open house · Friday</small>
+              </div>
+            </div>
+            <p class="sample-dim"><span class="sample-style">Neo Editorial · Announcement</span><strong>Instagram square · 1080 × 1080 · 1:1</strong></p>
+          </article>
+          <article class="sample-item" role="listitem" style="--sample-width: 325px; --sample-ratio: 1.91 / 1" aria-label="Modern Botanical product launch poster, LinkedIn landscape, 1200 by 628">
+            <div class="sample-poster sample-botanical" aria-hidden="true">
+              <span class="sample-kind">Modern botanical</span>
+              <span class="poster-art"></span>
+              <div class="sample-copy">
+                <strong>Saffron<br />in bloom</strong>
+                <small>New collection · 08.12</small>
+              </div>
+            </div>
+            <p class="sample-dim"><span class="sample-style">Modern Botanical · Product launch</span><strong>LinkedIn landscape · 1200 × 628 · 1.91:1</strong></p>
+          </article>
+          <article class="sample-item" role="listitem" style="--sample-width: 300px; --sample-ratio: 16 / 9" aria-label="Retro Sticker sale poster, YouTube thumbnail, 1920 by 1080">
+            <div class="sample-poster sample-retro" aria-hidden="true">
+              <span class="sample-kind">Retro sticker</span>
+              <span class="poster-art"></span>
+              <div class="sample-copy">
+                <strong>Good stuff<br />costs less</strong>
+                <small>Up to 40% off · Today</small>
+              </div>
+            </div>
+            <p class="sample-dim"><span class="sample-style">Retro Sticker · Sale</span><strong>YouTube thumbnail · 1920 × 1080 · 16:9</strong></p>
+          </article>
+          <article class="sample-item" role="listitem" style="--sample-width: 200px; --sample-ratio: 4 / 5" aria-label="Cloudflare generated Festive Pop artwork, Instagram portrait, 1080 by 1350">
+            <div class="sample-poster sample-cloudflare-festival" aria-hidden="true">
+              <span class="sample-kind">Cloudflare artwork</span>
+              <span class="poster-art"></span>
+              <div class="sample-copy">
+                <strong>Diwali<br />after dark</strong>
+                <small>A night of light</small>
+              </div>
+            </div>
+            <p class="sample-dim"><span class="sample-style">Cloudflare Art · Festive Pop</span><strong>Instagram portrait · 1080 × 1350 · 4:5</strong></p>
+          </article>
+          <article class="sample-item" role="listitem" style="--sample-width: 200px; --sample-ratio: 1 / 1" aria-label="Cloudflare generated Minimal Swiss launch artwork, Instagram square, 1080 by 1080">
+            <div class="sample-poster sample-cloudflare-minimal" aria-hidden="true">
+              <span class="sample-kind">Cloudflare artwork</span>
+              <span class="poster-art"></span>
+              <div class="sample-copy">
+                <strong>Less,<br />but lasting</strong>
+                <small>The new collection</small>
+              </div>
+            </div>
+            <p class="sample-dim"><span class="sample-style">Cloudflare Art · Minimal Swiss</span><strong>Instagram square · 1080 × 1080 · 1:1</strong></p>
+          </article>
+          <article class="sample-item" role="listitem" style="--sample-width: 300px; --sample-ratio: 16 / 9" aria-label="Uploaded photo with custom poster text, YouTube thumbnail, 1920 by 1080">
+            <div class="sample-poster sample-uploaded" aria-hidden="true">
+              <span class="sample-kind">Your photo + copy</span>
+              <span class="poster-art"></span>
+              <div class="sample-copy">
+                <strong>Make it<br />yours</strong>
+                <small>Your image. Your story.</small>
+              </div>
+            </div>
+            <p class="sample-dim"><span class="sample-style">Photo + exact copy</span><strong>YouTube thumbnail · 1920 × 1080 · 16:9</strong></p>
+          </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
     <main class="card" id="app"></main>
     <div
       id="poster-preview"
@@ -695,22 +1476,11 @@
         '</i></span><span>l</span><span>p</span><span>a</span><span>m</span><span class="tail" aria-hidden="true">' +
         tailSVG() +
         '<b>शिल्पम्</b></span>'
-      document
-        .querySelectorAll('#frame b')
-        .forEach((b) => (b.innerHTML = mand('#3F5A47', 'none', 12, 2.4)))
       cropImg(CG.mandala)
         .then((u) =>
           document
-            .querySelectorAll('.wm .dot,#frame b')
+            .querySelectorAll('.wm .dot')
             .forEach((d) => (d.innerHTML = '<img alt="" src="' + u + '">')),
-        )
-        .catch(() => {})
-      cropImg(CG.border)
-        .then((u) =>
-          document.documentElement.style.setProperty(
-            '--tile',
-            'url(' + u + ')',
-          ),
         )
         .catch(() => {})
       let tt
@@ -727,7 +1497,9 @@
           const { busy, fullPosters, ...r } = S
           delete r.img
           delete r.wantImg
-          localStorage.setItem('shilpam:v1', JSON.stringify(r))
+          delete r.photo
+          delete r.photoName
+          sessionStorage.setItem('shilpam:v1', JSON.stringify(r))
         } catch (e) {}
       }
       const ai = async (body, url = '/api/ai', ms = 20000) => {
@@ -833,13 +1605,97 @@
         busy: false,
         imp: null,
         fullPosters: null,
+        photo: null,
+        photoName: '',
       }
       const STEPN = ['Post type', 'Your idea', 'Design', 'Platform', 'Poster']
+      function photoField() {
+        return `<section class="photo-upload" aria-label="Optional image upload">
+          <div class="photo-upload-head">
+            <div><div class="photo-upload-title">Add your own photo or artwork <span>(optional)</span></div><p class="photo-upload-help">JPG, PNG or WebP · up to 12 MB</p></div>
+            <label class="photo-choose" for="poster-photo">${S.photo ? 'Replace photo' : 'Choose photo'}</label>
+          </div>
+          <input class="photo-file-input" id="poster-photo" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="photo-upload-note">
+          ${S.photo ? `<div class="photo-preview"><img src="${S.photo}" alt=""><span>${esc(S.photoName || 'Your photo')}</span><button class="photo-remove" type="button" onclick="clearPhoto()">Remove</button></div>` : ''}
+          <p class="photo-upload-note" id="photo-upload-note">When you generate, a resized copy is sent to Cloudflare Workers AI as a visual reference. Shilpam does not save your upload.</p>
+        </section>`
+      }
+      async function importPhoto(file) {
+        const input = $('#poster-photo')
+        if (!file) return
+        if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+          toast('Choose a JPG, PNG or WebP image.')
+          if (input) input.value = ''
+          return
+        }
+        if (file.size > 12 * 1024 * 1024) {
+          toast('That image is over 12 MB. Choose a smaller file.')
+          if (input) input.value = ''
+          return
+        }
+        let bitmap
+        try {
+          bitmap = await createImageBitmap(file)
+        } catch (error) {
+          toast(`Could not open that image (${apiError(error)}). Choose another file.`)
+          if (input) input.value = ''
+          return
+        }
+        let photo
+        try {
+          if (bitmap.width * bitmap.height > 40000000) {
+            throw new Error('The image dimensions are too large.')
+          }
+          const scale = Math.min(480 / Math.max(bitmap.width, bitmap.height), 1)
+          const canvas = document.createElement('canvas')
+          canvas.width = Math.max(1, Math.round(bitmap.width * scale))
+          canvas.height = Math.max(1, Math.round(bitmap.height * scale))
+          const context = canvas.getContext('2d', { alpha: false })
+          if (!context) throw new Error('Could not prepare the image preview.')
+          context.fillStyle = '#fff'
+          context.fillRect(0, 0, canvas.width, canvas.height)
+          context.drawImage(bitmap, 0, 0, canvas.width, canvas.height)
+          for (let quality = 0.86; quality >= 0.56; quality -= 0.1) {
+            photo = canvas.toDataURL('image/jpeg', quality)
+            const encoded = photo.slice('data:image/jpeg;base64,'.length)
+            if (Math.ceil(encoded.length * 3 / 4) <= 512 * 1024) break
+          }
+          if (!photo.startsWith('data:image/jpeg;base64,')) {
+            throw new Error('Could not encode the image.')
+          }
+          if (Math.ceil(photo.slice('data:image/jpeg;base64,'.length).length * 3 / 4) > 512 * 1024) {
+            throw new Error('The image could not be compressed small enough.')
+          }
+        } catch (error) {
+          toast(`Could not prepare that image (${apiError(error)}).`)
+          return
+        } finally {
+          bitmap.close()
+        }
+        S.photo = photo
+        S.photoName = file.name
+        S.fullPosters = null
+        draw()
+      }
+      function clearPhoto() {
+        S.photo = null
+        S.photoName = ''
+        S.fullPosters = null
+        draw()
+      }
       function go(n) {
         S.step = n
         draw()
       }
       function set(k, v) {
+        if (k == 'type' && S.type != v) {
+          S.ideas = []
+          S.pick = null
+          S.copy = null
+          S.pal = null
+          S.imp = null
+          S.fullPosters = null
+        }
         S[k] = v
         draw()
       }
@@ -862,13 +1718,13 @@
             '<h2>What are we making today?</h2><p class="sub">Choose the kind of post. This shapes the tone of the words Shilpam writes.</p><div class="grid">' +
             TYPES.map(
               (t) =>
-                `<button class="opt ${S.type == t[0] ? 'on' : ''}" onclick="set('type','${t[0]}')"><b>${t[1]}</b><small>${t[2]}</small></button>`,
+                `<button class="opt ${S.type == t[0] ? 'on' : ''}" aria-pressed="${S.type == t[0]}" onclick="set('type','${t[0]}')"><b>${t[1]}</b><small>${t[2]}</small></button>`,
             ).join('') +
             '</div>'
           nav = `<span></span><button class="btn" ${S.type ? '' : 'disabled'} onclick="go(1)">Continue</button>`
         }
         if (S.step == 1) {
-          h += `<h2>Tell us about it</h2><p class="sub">A sentence or two is plenty. AI handles the rest.</p><label>Your idea</label><textarea id="tp" rows="3" placeholder="e.g. Rooftop jazz night for the neighbourhood, Saturday 7pm" oninput="S.topic=this.value;S.fullPosters=null;S.imp=null;$('#nx').disabled=S.topic.trim().length<3">${esc(S.topic)}</textarea><label>Extra details (optional)</label><input type="text" id="ex" placeholder="Date, place, brand name…" value="${esc(S.extra)}" oninput="S.extra=this.value;S.fullPosters=null"><div style="margin-top:16px"><button class="btn r" id="sp" onclick="ideas()">✦ Spark ideas with AI</button> <button class="btn g" id="imp" onclick="improve()">✦ Improve my idea</button></div>${S.imp && !S.imp.used ? `<div class="impbox"><b>Sharper version</b><p>${esc(S.imp.idea)}</p><button class="mini" onclick="useImp()">Use this idea</button></div>` : ''}<div class="chips">${S.ideas.map((x, i) => `<button class="chip ${S.pick == i ? 'on' : ''}" onclick="S.pick=${i};S.fullPosters=null;draw()"><b>${esc(x.headline)}</b>${esc(x.angle || '')}</button>`).join('')}</div>`
+          h += `<h2>Tell us about it</h2><p class="sub">A sentence or two is plenty. AI handles the rest.</p><label>Your idea</label><textarea id="tp" rows="3" placeholder="e.g. Rooftop jazz night for the neighbourhood, Saturday 7pm" oninput="S.topic=this.value;S.fullPosters=null;S.imp=null;$('#nx').disabled=S.topic.trim().length<3">${esc(S.topic)}</textarea><label>Extra details (optional)</label><input type="text" id="ex" placeholder="Date, place, brand name…" value="${esc(S.extra)}" oninput="S.extra=this.value;S.fullPosters=null">${photoField()}<div style="margin-top:16px"><button class="btn r" id="sp" onclick="ideas()">✦ Spark ideas with AI</button> <button class="btn g" id="imp" onclick="improve()">✦ Improve my idea</button></div>${S.imp && !S.imp.used ? `<div class="impbox"><b>Sharper version</b><p>${esc(S.imp.idea)}</p><button class="mini" onclick="useImp()">Use this idea</button></div>` : ''}<div class="chips">${S.ideas.map((x, i) => `<button class="chip ${S.pick == i ? 'on' : ''}" onclick="S.pick=${i};S.fullPosters=null;draw()"><b>${esc(x.headline)}</b>${esc(x.angle || '')}</button>`).join('')}</div>`
           nav = `<button class="btn g" onclick="go(0)">Back</button><button class="btn" id="nx" ${S.topic.trim().length >= 3 ? '' : 'disabled'} onclick="go(2)">Continue</button>`
         }
         if (S.step == 2) {
@@ -880,7 +1736,7 @@
                   k == 'ai' ?
                     { bg: '#F4EEDF', fg: '#22372B', a: '#E58F83', b: '#8A9A7B' }
                   : ST[k].p
-                return `<button class="opt ${S.style == k ? 'on' : ''}" onclick="S.style='${k}';S.pal=null;S.fullPosters=null;draw()"><b>${STYLES[k][0]}</b><small>${STYLES[k][1]}</small><div class="sw">${[p.bg.startsWith('l') ? '#ff7aa2' : p.bg, p.fg, p.a, p.b].map((c) => `<u style="background:${c}"></u>`).join('')}</div></button>`
+                return `<button class="opt ${S.style == k ? 'on' : ''}" aria-pressed="${S.style == k}" onclick="S.style='${k}';S.pal=null;S.fullPosters=null;draw()"><b>${STYLES[k][0]}</b><small>${STYLES[k][1]}</small><div class="sw">${[p.bg.startsWith('l') ? '#ff7aa2' : p.bg, p.fg, p.a, p.b].map((c) => `<u style="background:${c}"></u>`).join('')}</div></button>`
               })
               .join('') +
             '</div>'
@@ -888,24 +1744,30 @@
         }
         if (S.step == 3) {
           h +=
-            '<h2>Where will it live?</h2><p class="sub">Pick one or more. Cloudflare creates fresh artwork for each platform; Shilpam adds your exact short text. If generation fails, the default layout is used.</p><div class="grid">' +
+            `<h2>Where will it live?</h2><p class="sub">${S.photo ? 'Your photo will be sent to Cloudflare Workers AI as an editing reference. Shilpam will add your exact text.' : 'Pick one or more. Cloudflare creates fresh artwork for each platform; Shilpam adds your exact short text. If generation fails, the default layout is used.'}</p><div class="grid">` +
             Object.entries(SZ)
               .map(([k, z]) => {
                 const s = (46 / Math.max(z.w, z.h)) * 1,
                   w = Math.round(z.w * s * 1.5),
                   hh = Math.round(z.h * s * 1.5)
-                return `<button class="opt ${S.pf.includes(k) ? 'on' : ''}" onclick="tp('${k}')"><span class="ar" style="width:${w}px;height:${hh}px"></span><b>${z.l}</b><small>${z.r} · ${z.w}×${z.h}</small></button>`
+                return `<button class="opt ${S.pf.includes(k) ? 'on' : ''}" aria-pressed="${S.pf.includes(k)}" onclick="tp('${k}')"><span class="ar" style="width:${w}px;height:${hh}px"></span><b>${z.l}</b><small>${z.r} · ${z.w}×${z.h}</small></button>`
               })
               .join('') +
-            '</div>'
+            `</div><p class="selection-note">${S.pf.length} ${S.pf.length == 1 ? 'format' : 'formats'} selected</p>`
           nav = `<button class="btn g" onclick="go(2)">Back</button><button class="btn" ${S.pf.length ? '' : 'disabled'} onclick="go(4);make()">Generate poster</button>`
         }
         if (S.step == 4) {
           h +=
             '<h2 id="h4">Crafting…</h2><p class="sub" id="s4"></p><div class="out" id="out"></div>'
-          nav = `<button class="btn g" onclick="go(3)">Back</button><span><button class="btn g" onclick="make(1)">Rewrite copy</button> <button class="btn" onclick="reset()">New poster</button></span>`
+          nav = `<button class="btn g" onclick="go(3)">Back</button><span><button class="btn g" onclick="make(1)">Rewrite copy</button> <button class="btn" onclick="reset()">Start over</button></span>`
         }
         a.innerHTML = h + `<div class="nav">${nav}</div>`
+        const photoInput = $('#poster-photo')
+        if (photoInput) {
+          photoInput.addEventListener('change', () => {
+            importPhoto(photoInput.files && photoInput.files[0])
+          })
+        }
         if (S.step == 4 && S.copy) show()
         save()
       }
@@ -922,10 +1784,15 @@
           extra: '',
           ideas: [],
           pick: null,
+          style: 'nature',
+          pf: ['ig_4x5', 'yt_16x9'],
           copy: null,
           pal: null,
+          busy: false,
           imp: null,
           fullPosters: null,
+          photo: null,
+          photoName: '',
         })
         draw()
       }
@@ -1062,6 +1929,10 @@
       async function make(re) {
         S.busy = true
         S.fullPosters = null
+        const referenceImage = S.photo ? {
+          mime: 'image/jpeg',
+          b64: S.photo.slice('data:image/jpeg;base64,'.length),
+        } : null
         $('#out').innerHTML = ''
         $('#h4').innerHTML =
           '<span class="sp" style="border-color:#22372b44;border-top-color:#22372b"></span>Crafting…'
@@ -1103,7 +1974,9 @@
           }
         }
         $('#s4').textContent =
-          `Cloudflare is creating image-led artwork for each platform; Shilpam will add your exact, minimal copy.`
+          S.photo ?
+            'Cloudflare is using your photo as a visual reference; Shilpam will add your exact text.'
+          : 'Cloudflare is creating image-led artwork for each platform; Shilpam will add your exact, minimal copy.'
         try {
           const results = await Promise.allSettled(
             S.pf.map(async (platform) => {
@@ -1115,6 +1988,7 @@
                   style: S.style,
                   platform,
                   visual: S.imp ? S.imp.visual : '',
+                  ...(referenceImage ? { referenceImage } : {}),
                 },
                 '/api/image',
                 60000,
@@ -1129,7 +2003,9 @@
           toast('Cloudflare created the artwork; exact copy was overlaid.')
         } catch (e) {
           S.fullPosters = null
-          toast(`Cloudflare poster failed (${apiError(e)}). Using the default Shilpam layout.`)
+          toast(S.photo ?
+            `Cloudflare photo edit failed (${apiError(e)}). Using your photo with Shilpam's layout.`
+          : `Cloudflare poster failed (${apiError(e)}). Using the default Shilpam layout.`)
         }
         S.busy = false
         show()
@@ -1142,6 +2018,8 @@
         $('#s4').textContent =
           S.fullPosters ?
             'Each platform has its own Cloudflare artwork with the exact poster copy added by Shilpam.'
+          : S.photo ?
+            "Cloudflare could not complete its image edit. Your photo is shown with Shilpam's exact text."
           : 'Showing the default Shilpam layout. Full generated images are not stored across refreshes.'
         o.innerHTML = ''
         S.pf.forEach((k) => {
@@ -1266,6 +2144,7 @@
       function poster(k) {
         const { w, h } = SZ[k]
         if (S.fullPosters && S.fullPosters[k]) return cloudPoster(k)
+        if (S.photo) return cloudPoster(k, S.photo)
         const
           sk = S.style,
           s = ST[sk == 'ai' ? 'nature' : sk],
@@ -1357,7 +2236,7 @@
           } ${fs}px/${s.ld} ${s.d};letter-spacing:${s.tr};${shd}"><span>${esc(T)}</span></div><div style="flex:none;height:${sh}px;overflow:hidden;font:${sk == 'street' ? 600 : 400} ${sf}px/1.3 Inter,sans-serif;${sk == 'street' ? `border-left:8px solid ${P.a};padding-left:.6em` : ''}">${esc(c.sub)}</div></div>`
         return el
       }
-      function cloudPoster(k) {
+      function cloudPoster(k, source = S.fullPosters && S.fullPosters[k]) {
         const { w, h, textPlacement } = SZ[k]
         const wide = textPlacement == 'left'
         const margin = Math.round(Math.min(w, h) * (wide ? 0.055 : 0.035))
@@ -1366,8 +2245,8 @@
 
         const image = document.createElement('img')
         image.alt = ''
-        image.src = S.fullPosters[k]
-        image.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;display:block'
+        image.src = source
+        image.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover'
 
         const panel = document.createElement('div')
         panel.style.cssText = wide ?
@@ -1471,17 +2350,91 @@
         setTimeout(() => URL.revokeObjectURL(u), 4000)
       }
       try {
-        const r = JSON.parse(localStorage.getItem('shilpam:v1') || '{}')
+        const r = JSON.parse(sessionStorage.getItem('shilpam:v1') || '{}')
         if (r && Array.isArray(r.pf) && typeof r.step == 'number') {
           delete r.img
           delete r.wantImg
           delete r.fullPosters
+          delete r.photo
+          delete r.photoName
           Object.assign(S, r)
         }
       } catch (e) {}
       S.busy = false
       if (S.step == 4 && !S.copy) S.step = 3
       draw()
+      const showcaseTrack = document.querySelector('.poster-track')
+      showcaseTrack.querySelectorAll('.sample-item').forEach((item) => {
+        const select = document.createElement('button')
+        select.className = 'sample-select'
+        select.type = 'button'
+        select.setAttribute(
+          'aria-label',
+          `Enlarge ${item.getAttribute('aria-label')}. Click again or move away to resume the showcase.`,
+        )
+        select.setAttribute('aria-pressed', 'false')
+        item.append(select)
+      })
+      const sampleSet = showcaseTrack.querySelector('.poster-set')
+      const duplicateSet = sampleSet.cloneNode(true)
+      duplicateSet.setAttribute('aria-hidden', 'true')
+      duplicateSet.querySelectorAll('.sample-select').forEach((select) => {
+        select.tabIndex = -1
+      })
+      showcaseTrack.append(duplicateSet)
+      const clearShowcaseSelection = (blurFocus = false) => {
+        showcaseTrack.querySelectorAll('.sample-item').forEach((sample) => {
+          sample.classList.remove('is-selected')
+          sample.querySelector('.sample-select').setAttribute('aria-pressed', 'false')
+        })
+        showcaseTrack.classList.remove('is-paused')
+        const focusedButton = document.activeElement &&
+          document.activeElement.closest('.sample-select')
+        if (blurFocus && focusedButton) focusedButton.blur()
+      }
+      showcaseTrack.addEventListener('click', (event) => {
+        const select = event.target.closest('.sample-select')
+        if (!select) return
+        const item = select.closest('.sample-item')
+        const isSelected = item.classList.contains('is-selected')
+        showcaseTrack.querySelectorAll('.sample-item').forEach((sample) => {
+          const button = sample.querySelector('.sample-select')
+          const shouldSelect = sample === item && !isSelected
+          sample.classList.toggle('is-selected', shouldSelect)
+          button.setAttribute('aria-pressed', String(shouldSelect))
+        })
+        showcaseTrack.classList.toggle('is-paused', !isSelected)
+        if (isSelected && event.detail > 0) select.blur()
+      })
+      showcaseTrack.querySelectorAll('.sample-item').forEach((item) => {
+        item.addEventListener('pointerleave', () => {
+          if (item.classList.contains('is-selected')) clearShowcaseSelection(true)
+        })
+      })
+      document.addEventListener('click', (event) => {
+        if (!event.target.closest('.sample-item')) {
+          clearShowcaseSelection(event.detail > 0)
+        }
+      })
+      {
+        const posterCloud = document.querySelector('.poster-cloud')
+        const posterTrack = document.querySelector('.poster-track')
+        if (
+          posterCloud &&
+          posterTrack &&
+          !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ) {
+          posterCloud.scrollLeft = 0
+          const setPosterTravel = () => {
+            const firstSet = posterTrack.querySelector('.poster-set')
+            const distance = firstSet ? firstSet.getBoundingClientRect().width : 0
+            posterTrack.style.setProperty('--poster-travel', `-${distance}px`)
+            posterTrack.style.animationDuration = `${Math.max(1, distance / 24)}s`
+          }
+          setPosterTravel()
+          window.addEventListener('resize', setPosterTravel)
+        }
+      }
     </script>
   </body>
 </html>

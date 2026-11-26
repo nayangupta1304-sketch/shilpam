@@ -1,7 +1,6 @@
 # keys and local files must never reach GitHub
 .env
 .env.*
-!.env.example
 node_modules
 .vercel
 .DS_Store

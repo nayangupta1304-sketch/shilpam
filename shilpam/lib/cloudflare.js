@@ -52,7 +52,7 @@ async function generateCloudflareImage(prompt, format, referenceImage) {
       accept: 'application/json'
     },
     body
-  }, 55000);
+  }, 90000);
 
   if (!response.ok) {
     const error = new Error('upstream');

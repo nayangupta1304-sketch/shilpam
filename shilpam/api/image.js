@@ -4,7 +4,6 @@ const { clean, limited, body: readBody } = require('../lib/util');
 const { TYPES, LOOK } = require('../lib/consts');
 const { FORMATS } = require('../lib/platforms');
 const { generateCloudflareImage, buildPosterPrompt } = require('../lib/cloudflare');
-const { containsText } = require('../lib/text-detection');
 const owns = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
 const MAX_REFERENCE_BYTES = 512 * 1024;
 
@@ -52,21 +51,6 @@ module.exports = async (req, res) => {
   });
   try {
     const image = await generateCloudflareImage(prompt, format, referenceImage);
-    let textDetected;
-    try {
-      textDetected = await containsText(Buffer.from(image.b64, 'base64'));
-    } catch (e) {
-      const error = new Error('text_check_failed');
-      error.code = 'text_check_failed';
-      error.detail = `Could not verify the generated artwork for stray text${e && e.message ? `: ${e.message}` : ''}.`;
-      throw error;
-    }
-    if (textDetected) {
-      const error = new Error('text_detected');
-      error.code = 'text_detected';
-      error.detail = 'Cloudflare artwork contained detected lettering; using the default Shilpam layout.';
-      throw error;
-    }
     return send(200, { ok: true, data: image });
   }
   catch (e) { return send(502, { ok: false, code: e.code || 'failed', detail: e.detail }); }

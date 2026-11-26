@@ -2012,7 +2012,7 @@
                   ...(referenceImage ? { referenceImage } : {}),
                 },
                 '/api/image',
-                60000,
+                180000,
               )
               const resized = await fitPosterImage(image, platform)
               return [platform, resized]

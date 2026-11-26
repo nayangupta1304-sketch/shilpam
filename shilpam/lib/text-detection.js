@@ -27,11 +27,14 @@ function containsText(image) {
 
     const recognized = words.filter((word) => {
       const letters = word.text.replace(/[^A-Za-z0-9]/g, '')
-      return letters.length >= 2 && word.confidence >= 30
-    })
-    return recognized.length >= 2 || recognized.some((word) => {
-      const letters = word.text.replace(/[^A-Za-z0-9]/g, '')
       return letters.length >= 3 && word.confidence >= 70
+    })
+    return recognized.filter((word) => {
+      const letters = word.text.replace(/[^A-Za-z0-9]/g, '')
+      return letters.length >= 5
+    }).length >= 2 || recognized.some((word) => {
+      const letters = word.text.replace(/[^A-Za-z0-9]/g, '')
+      return letters.length >= 8
     })
   })
   recognitionQueue = job.then(() => undefined, () => undefined)

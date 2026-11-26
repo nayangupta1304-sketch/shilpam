@@ -1687,6 +1687,21 @@
         S.step = n
         draw()
       }
+      function editIdea() {
+        S.step = 1
+        S.copy = null
+        S.fullPosters = null
+        S.busy = false
+        draw()
+        setTimeout(() => {
+          const topic = $('#tp')
+          if (topic) {
+            topic.focus()
+            topic.setSelectionRange(topic.value.length, topic.value.length)
+            topic.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          }
+        }, 0)
+      }
       function set(k, v) {
         if (k == 'type' && S.type != v) {
           S.ideas = []
@@ -1759,7 +1774,7 @@
         if (S.step == 4) {
           h +=
             '<h2 id="h4">Crafting…</h2><p class="sub" id="s4"></p><div class="out" id="out"></div>'
-          nav = `<button class="btn g" onclick="go(3)">Back</button><span><button class="btn g" onclick="make(1)">Rewrite copy</button> <button class="btn" onclick="reset()">Start over</button></span>`
+          nav = `<button class="btn g" onclick="go(3)">Back</button><span><button class="btn g" onclick="editIdea()">Edit idea</button> <button class="btn g" onclick="make(1)">Regenerate copy</button> <button class="btn" onclick="reset()">Start over</button></span>`
         }
         a.innerHTML = h + `<div class="nav">${nav}</div>`
         const photoInput = $('#poster-photo')
@@ -1928,7 +1943,7 @@
       const ink = (h) => ((lum(h) ?? 1) > 0.4 ? '#161616' : '#fff')
       async function make(re) {
         S.busy = true
-        S.fullPosters = null
+        if (!re) S.fullPosters = null
         const referenceImage = S.photo ? {
           mime: 'image/jpeg',
           b64: S.photo.slice('data:image/jpeg;base64,'.length),
@@ -1972,6 +1987,12 @@
             S.pal = null
             toast(`AI palette failed (${apiError(e)}). Using the default palette.`)
           }
+        }
+        if (re) {
+          S.busy = false
+          show()
+          save()
+          return
         }
         $('#s4').textContent =
           S.photo ?
